@@ -2,6 +2,8 @@ package org.mule.common.metadata.field.property;
 
 import org.mule.common.metadata.field.property.exception.RepeatedFieldPropertyException;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Set;
  * It ensures that for a given field, the properties of it will never collide.
  * Also, it has some helper methods to access the different properties in it
  */
-public class MetaDataFieldPropertyManager {
+public class  MetaDataFieldPropertyManager {
 
     private List<MetaDataFieldProperty> fieldProperties;
 
@@ -27,10 +29,11 @@ public class MetaDataFieldPropertyManager {
      * @param fieldPropertyClass class to look for
      * @return a MetaDataFieldProperty if the current manager has a fieldPropertyClass, null otherwise
      */
-    public MetaDataFieldProperty getProperty(Class<? extends MetaDataFieldProperty> fieldPropertyClass){
+    @SuppressWarnings("unchecked")
+	public <T extends MetaDataFieldProperty> T getProperty(Class<T> fieldPropertyClass){
         for (MetaDataFieldProperty fc : this.fieldProperties){
             if (fieldPropertyClass.equals(fc.getClass())){
-                return fc;
+                return (T) fc;
             }
         }
         return null;
@@ -39,12 +42,12 @@ public class MetaDataFieldPropertyManager {
     /**
      * Adds a property if the class of metaDataFieldProperty was not already used
      * in the current manager
-     * @param FieldProperty new property to be added
+     * @param fieldProperty new property to be added
      * @return true if it was added successfully, false otherwise
      */
-    public boolean addProperty(MetaDataFieldProperty FieldProperty){
-       if (! hasProperty(FieldProperty.getClass())){
-           return this.fieldProperties.add(FieldProperty);
+    public boolean addProperty(MetaDataFieldProperty fieldProperty){
+       if (! hasProperty(fieldProperty.getClass())){
+           return this.fieldProperties.add(fieldProperty);
        }
        return false;
     }
@@ -76,7 +79,7 @@ public class MetaDataFieldPropertyManager {
     }
 
     private boolean hasRepeatedFieldProperties(List<MetaDataFieldProperty> fieldProperties){
-        Set<Class> clazzes = new HashSet<Class>();
+        Set<Class<?>> clazzes = new HashSet<Class<?>>();
         for (MetaDataFieldProperty fc: fieldProperties){
             clazzes.add(fc.getClass());
         }

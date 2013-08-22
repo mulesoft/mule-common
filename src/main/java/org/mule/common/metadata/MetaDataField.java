@@ -20,7 +20,7 @@ public interface MetaDataField {
 
     public boolean hasProperty(Class<? extends MetaDataFieldProperty> metaDataFieldProperty);
 
-    public MetaDataFieldProperty getProperty(Class<? extends MetaDataFieldProperty> metaDataFieldProperty);
+    public <T extends MetaDataFieldProperty> T getProperty(Class<T> metaDataFieldProperty);
 
 	public static enum FieldAccessType
 	{

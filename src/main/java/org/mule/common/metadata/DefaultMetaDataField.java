@@ -69,7 +69,7 @@ public class DefaultMetaDataField
     }
 
     @Override
-    public MetaDataFieldProperty getProperty(Class<? extends MetaDataFieldProperty> metaDataFieldProperty) {
+    public <T extends MetaDataFieldProperty> T getProperty(Class<T> metaDataFieldProperty) {
         return this.metaDataFieldPropertyManager.getProperty(metaDataFieldProperty);
     }
 
