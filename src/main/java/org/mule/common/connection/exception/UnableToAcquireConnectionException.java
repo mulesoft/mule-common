@@ -34,7 +34,7 @@ public class UnableToAcquireConnectionException extends Exception
     {
         super(throwable);
     }
-    
+
     /**
      * Create a new exception
      * 

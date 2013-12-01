@@ -11,7 +11,7 @@ public class DefaultSimpleMetaDataBuilder<P extends MetaDataBuilder<?>> implemen
 {
 
     private DataType dataType;
-	private String implClass;
+    private String implClass;
     private P parentBuilder;
 
 
@@ -21,20 +21,18 @@ public class DefaultSimpleMetaDataBuilder<P extends MetaDataBuilder<?>> implemen
         this.parentBuilder = parentBuilder;
     }
 
-    @Override
     public SimpleMetaDataModel build()
     {
         DefaultSimpleMetaDataModel defaultSimpleMetaDataModel = new DefaultSimpleMetaDataModel(dataType);
         defaultSimpleMetaDataModel.setImplementationClass(implClass == null? dataType.getDefaultImplementationClass() : implClass);
-		return defaultSimpleMetaDataModel;
+        return defaultSimpleMetaDataModel;
     }
 
-	public void setImplClass(String implClass) {
-		this.implClass = implClass;
-		
-	}
+    public void setImplClass(String implClass) {
+        this.implClass = implClass;
+        
+    }
 
-    @Override
     public P endSimpleField()
     {
         return parentBuilder;

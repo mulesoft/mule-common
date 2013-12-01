@@ -5,12 +5,12 @@ import org.mule.common.metadata.field.property.MetaDataFieldProperty;
 import java.util.List;
 
 public interface MetaDataField {
-	
-	public String getName();
 
-	public MetaDataModel getMetaDataModel();
+    public String getName();
 
-	public FieldAccessType getAccessType();
+    public MetaDataModel getMetaDataModel();
+
+    public FieldAccessType getAccessType();
 
     public List<MetaDataFieldProperty> getProperties();
 
@@ -22,8 +22,8 @@ public interface MetaDataField {
 
     public <T extends MetaDataFieldProperty> T getProperty(Class<T> metaDataFieldProperty);
 
-	public static enum FieldAccessType
-	{
-		READ, WRITE, READ_WRITE;
-	}
+    public static enum FieldAccessType
+    {
+        READ, WRITE, READ_WRITE;
+    }
 }

@@ -16,7 +16,7 @@ public class DefaultTestResult extends DefaultResult<Void> implements TestResult
     {
         super(null, status);
     }
-    
+
     public DefaultTestResult(TestResult.Status status, String message)
     {
         super(null, status, message);
@@ -27,5 +27,3 @@ public class DefaultTestResult extends DefaultResult<Void> implements TestResult
         super(null, status, message, failureType, throwable);
     }
 }
-
-

@@ -12,8 +12,6 @@ package org.mule.common.metadata;
 
 import org.mule.common.metadata.datatype.DataType;
 
-import java.util.Map;
-
 public class DefaultParameterizedMapMetaDataModel extends AbstractMetaDataModel implements ParameterizedMapMetaDataModel
 {
     private MetaDataModel keyMetaDataModel;
@@ -33,19 +31,16 @@ public class DefaultParameterizedMapMetaDataModel extends AbstractMetaDataModel 
         this.name = name;
     }
 
-    @Override
     public MetaDataModel getKeyMetaDataModel()
     {
         return keyMetaDataModel;
     }
 
-    @Override
     public MetaDataModel getValueMetaDataModel()
     {
         return valueMetaDataModel;
     }
 
-    @Override
     public String getName()
     {
         return name;
@@ -115,11 +110,8 @@ public class DefaultParameterizedMapMetaDataModel extends AbstractMetaDataModel 
     }
 
 
-    @Override
     public void accept(MetaDataModelVisitor modelVisitor) {
         modelVisitor.visitStaticMapModel(this);
     }
 
 }
-
-

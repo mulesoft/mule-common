@@ -29,12 +29,11 @@ public class DefaultMetaDataBuilder implements MetaDataBuilder<MetaDataModel>
 
     public XmlMetaDataBuilder createXmlObject(String name)
     {
-    	DefaultXmlMetaDataBuilder result = new DefaultXmlMetaDataBuilder(name);
-    	root = result;
-    	return result;
+        DefaultXmlMetaDataBuilder result = new DefaultXmlMetaDataBuilder(name);
+        root = result;
+        return result;
     }    
 
-    @Override
     public MetaDataModel build()
     {
         return root.build();

@@ -23,6 +23,5 @@ public class MetaDataQueryFilter {
         MetaDataQueryFilterVisitor modelVisitor = new MetaDataQueryFilterVisitor(fields);
         model.accept(modelVisitor);
         return modelVisitor.filteringResult();
-
     }
 }

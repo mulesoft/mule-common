@@ -6,12 +6,10 @@ package org.mule.common.query.expression;
 public class NumberValue extends Value<Number>
 {
 
-
     public NumberValue(Number value)
     {
         super(value);
     }
-
 
     public static NumberValue fromLiteral(String literal)
     {

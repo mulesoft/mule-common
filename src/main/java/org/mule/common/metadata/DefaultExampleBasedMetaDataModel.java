@@ -16,13 +16,11 @@ public class DefaultExampleBasedMetaDataModel extends AbstractMetaDataModel impl
         this.example = example;
     }
 
-    @Override
     public String getExampleContent()
     {
         return example;
     }
 
-    @Override
     public void accept(MetaDataModelVisitor modelVisitor)
     {
     }

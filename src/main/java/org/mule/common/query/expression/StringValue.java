@@ -31,5 +31,4 @@ public class StringValue extends Value<String>
         return "'" + getValue() + "'";
     }
 
-
 }

@@ -4,6 +4,6 @@ import org.mule.common.Result;
 
 public interface MetaDataDescriptor
 {
-	public Result<MetaData> getInputMetaData();
-	public Result<MetaData> getOutputMetaData(MetaData inputMetaData);
+    public Result<MetaData> getInputMetaData();
+    public Result<MetaData> getOutputMetaData(MetaData inputMetaData);
 }

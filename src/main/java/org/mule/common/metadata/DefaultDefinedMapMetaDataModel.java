@@ -18,9 +18,7 @@ import java.util.*;
  * Model for representing dynamic maps with string keys
  */
 
-public class DefaultDefinedMapMetaDataModel 
-	extends AbstractMetaDataModel 
-	implements DefinedMapMetaDataModel
+public class DefaultDefinedMapMetaDataModel extends AbstractMetaDataModel implements DefinedMapMetaDataModel
 {
     private List<MetaDataField> fields;
     private String name;
@@ -60,7 +58,6 @@ public class DefaultDefinedMapMetaDataModel
     }
 
 
-    @Override
     public Set<String> getKeys()
     {
         Set<String> result = new HashSet<String>();
@@ -70,12 +67,10 @@ public class DefaultDefinedMapMetaDataModel
         return result;
     }
 
-    @Override
     public MetaDataModel getKeyMetaDataModel() {
         return new DefaultSimpleMetaDataModel(DataType.STRING);
     }
 
-    @Override
     public MetaDataModel getValueMetaDataModel(String key) 
     {
         for(MetaDataField mdf : this.getFields()){
@@ -86,13 +81,11 @@ public class DefaultDefinedMapMetaDataModel
         return null;
     }
 
-    @Override
     public String getName()
     {
         return name;
     }
 
-    @Override
     public List<MetaDataField> getFields() {
         return Collections.unmodifiableList(fields);
     }
@@ -127,10 +120,7 @@ public class DefaultDefinedMapMetaDataModel
         return true;
     }
 
-    @Override
     public void accept(MetaDataModelVisitor modelVisitor) {
         modelVisitor.visitDynamicMapModel(this);
     }
 }
-
-

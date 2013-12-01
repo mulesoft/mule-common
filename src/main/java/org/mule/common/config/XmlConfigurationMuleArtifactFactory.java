@@ -17,5 +17,4 @@ import org.w3c.dom.Element;
 public interface XmlConfigurationMuleArtifactFactory
     extends MuleArtifactFactory<Element, XmlConfigurationCallback>
 {
-
 }

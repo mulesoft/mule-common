@@ -71,13 +71,13 @@ public class DefaultPojoMetaDataModelTestCase
     }
     
     public static class RecursivePojo {
-    	private RecursivePojo innerPojo;
-    	public RecursivePojo getInnerPojo() { return innerPojo; }
+        private RecursivePojo innerPojo;
+        public RecursivePojo getInnerPojo() { return innerPojo; }
     }
 
     public static class RecursivePojo2 {
-    	private RecursivePojo innerPojo;
-    	public RecursivePojo getInnerPojo() { return innerPojo; }
+        private RecursivePojo innerPojo;
+        public RecursivePojo getInnerPojo() { return innerPojo; }
     }
 
     private static String nameA = A.class.getName();
@@ -123,19 +123,19 @@ public class DefaultPojoMetaDataModelTestCase
         {
             List<MetaDataFieldProperty> capabilities = metaDataField.getProperties();
             final DataType dataType = metaDataField.getMetaDataModel().getDataType();
-			if (dataType != DataType.POJO) {
+            if (dataType != DataType.POJO) {
                 assertThat(capabilities.size(), CoreMatchers.is((dataType == DataType.ENUM) ? 5 : 4));
                 assertThat((DsqlSelectMetaDataFieldProperty)capabilities.get(0), CoreMatchers.is(DsqlSelectMetaDataFieldProperty.class));
                 assertThat((DsqlWhereMetaDataFieldProperty)capabilities.get(1), CoreMatchers.is(DsqlWhereMetaDataFieldProperty.class));
                 assertThat((DsqlOrderMetaDataFieldProperty)capabilities.get(2), CoreMatchers.is(DsqlOrderMetaDataFieldProperty.class));
                 assertThat("Operators should not be empty", ((DsqlQueryOperatorsMetaDataFieldProperty) capabilities.get(3)).getSupportedOperators().isEmpty(), CoreMatchers.is(false));
                 if (dataType == DataType.ENUM) {
-                	final ValidStringValuesFieldProperty validEnumValues = (ValidStringValuesFieldProperty)capabilities.get(4);
-					assertThat(validEnumValues, CoreMatchers.is(ValidStringValuesFieldProperty.class));
-					final List<String> validStrings = validEnumValues.getValidStrings();
-					assertThat(validStrings.size(), CoreMatchers.is(2));
-                	assertTrue(validStrings.contains("FOO"));
-                	assertTrue(validStrings.contains("BAR"));
+                    final ValidStringValuesFieldProperty validEnumValues = (ValidStringValuesFieldProperty)capabilities.get(4);
+                    assertThat(validEnumValues, CoreMatchers.is(ValidStringValuesFieldProperty.class));
+                    final List<String> validStrings = validEnumValues.getValidStrings();
+                    assertThat(validStrings.size(), CoreMatchers.is(2));
+                    assertTrue(validStrings.contains("FOO"));
+                    assertTrue(validStrings.contains("BAR"));
                 }
             }
         }
@@ -169,26 +169,24 @@ public class DefaultPojoMetaDataModelTestCase
 
     @Test
     public void testStackOverflowWhenCalculatingHashcode(){ 
-    	DefaultPojoMetaDataModel model = new DefaultPojoMetaDataModel(RecursivePojo.class);
-    	model.hashCode();
+        DefaultPojoMetaDataModel model = new DefaultPojoMetaDataModel(RecursivePojo.class);
+        model.hashCode();
     }
     
     @Test
     public void testTwoPojoMetadataModelsAreEqual(){ 
-    	DefaultPojoMetaDataModel model = new DefaultPojoMetaDataModel(RecursivePojo.class);
-    	DefaultPojoMetaDataModel anotherModel = new DefaultPojoMetaDataModel(RecursivePojo.class);
-    	assertTrue(model.hashCode() == anotherModel.hashCode());
-    	assertEquals(model, anotherModel);
+        DefaultPojoMetaDataModel model = new DefaultPojoMetaDataModel(RecursivePojo.class);
+        DefaultPojoMetaDataModel anotherModel = new DefaultPojoMetaDataModel(RecursivePojo.class);
+        assertTrue(model.hashCode() == anotherModel.hashCode());
+        assertEquals(model, anotherModel);
     }
 
     @Test
     public void testTwoPojoMetadataModelsAreNotEqualIfTheirClassNamesAreNotEqual(){ 
-    	DefaultPojoMetaDataModel model = new DefaultPojoMetaDataModel(RecursivePojo.class);
-    	DefaultPojoMetaDataModel anotherModel = new DefaultPojoMetaDataModel(RecursivePojo2.class);
-    	Assert.assertFalse(model.hashCode() == anotherModel.hashCode());
-    	Assert.assertFalse(model.equals(anotherModel));
+        DefaultPojoMetaDataModel model = new DefaultPojoMetaDataModel(RecursivePojo.class);
+        DefaultPojoMetaDataModel anotherModel = new DefaultPojoMetaDataModel(RecursivePojo2.class);
+        Assert.assertFalse(model.hashCode() == anotherModel.hashCode());
+        Assert.assertFalse(model.equals(anotherModel));
     }
     
 }
-
-

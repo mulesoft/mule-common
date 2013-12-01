@@ -10,11 +10,8 @@
 
 package org.mule.common.metadata;
 
-public interface MetaDataKey
-	extends Comparable<MetaDataKey>
+public interface MetaDataKey extends Comparable<MetaDataKey>
 {
     public String getId();
     public String getDisplayName();
 }
-
-

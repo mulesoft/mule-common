@@ -24,9 +24,9 @@ import java.util.regex.Pattern;
  *
  */
 public class MuleVersion {
-    
+
     private static final Pattern pattern = Pattern.compile("([0-9]+)(\\.)([0-9]+)(\\.([0-9]*))?(-(.+))?");
-    
+
     private int major = 0;
     private int minor = 0;
     private int revision = -1;

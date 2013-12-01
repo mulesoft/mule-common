@@ -10,21 +10,20 @@ import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonErrorNode;
 
 public class DsqlErrorNode 
-	extends CommonErrorNode 
-	implements IDsqlNode {
+    extends CommonErrorNode 
+    implements IDsqlNode {
 
-	public DsqlErrorNode(TokenStream input, Token start, Token stop, RecognitionException e) {
-		super(input, start, stop, e);
-	}
+    public DsqlErrorNode(TokenStream input, Token start, Token stop, RecognitionException e) {
+        super(input, start, stop, e);
+    }
 
-	@Override
-	public void accept(DsqlGrammarVisitor visitor) {
-		throw new DsqlParsingException();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<IDsqlNode> getChildren() {
-		return (List<IDsqlNode>) super.getChildren();
-	}
+    public void accept(DsqlGrammarVisitor visitor) {
+        throw new DsqlParsingException();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<IDsqlNode> getChildren() {
+        return (List<IDsqlNode>) super.getChildren();
+    }
 
 }

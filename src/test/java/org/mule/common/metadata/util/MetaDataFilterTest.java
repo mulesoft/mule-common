@@ -17,9 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
-
 
 public class MetaDataFilterTest {
     @Test
@@ -42,7 +41,6 @@ public class MetaDataFilterTest {
         model.accept(visitor);
 
         Assert.assertEquals(2,((DefinedMapMetaDataModel)visitor.filteringResult().getPayload()).getKeys().size());
-
     }
 
     @Test
@@ -65,7 +63,6 @@ public class MetaDataFilterTest {
         model.accept(visitor);
 
         Assert.assertEquals(2, visitor.filteringResult().getPayload().as(QueryResultMetaDataModel.class).getKeys().size());
-
     }
 
     @Test
@@ -90,7 +87,6 @@ public class MetaDataFilterTest {
         listModel.accept(visitor);
 
         Assert.assertEquals(2,visitor.filteringResult().getPayload().as(ListMetaDataModel.class).getElementModel().as(DefinedMapMetaDataModel.class).getKeys().size());
-
     }
 
     @Test
@@ -115,6 +111,5 @@ public class MetaDataFilterTest {
         listModel.accept(visitor);
 
         Assert.assertEquals(2,visitor.filteringResult().getPayload().as(ListMetaDataModel.class).getElementModel().as(QueryResultMetaDataModel.class).getKeys().size());
-
     }
 }

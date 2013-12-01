@@ -14,31 +14,30 @@ import org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProper
  * This object is responsible for retrieving the default properties for a future given field
  */
 public class DefaultFieldPropertyFactory implements FieldPropertyFactory {
-    @Override
+
     public List<MetaDataFieldProperty> getProperties(String name, MetaDataModel metaDataModel) {
-    	// name parameter not used
+        // name parameter not used
         List<MetaDataFieldProperty> fieldProperties = new ArrayList<MetaDataFieldProperty>();
-		fieldProperties.add(new DsqlSelectMetaDataFieldProperty());
-		fieldProperties.add(new DsqlWhereMetaDataFieldProperty());
-		fieldProperties.add(new DsqlOrderMetaDataFieldProperty());
-		fieldProperties.add(new DsqlQueryOperatorsMetaDataFieldProperty(
-				SupportedOperatorsFactory.getInstance().getSupportedOperationsFor(metaDataModel.getDataType())));
+        fieldProperties.add(new DsqlSelectMetaDataFieldProperty());
+        fieldProperties.add(new DsqlWhereMetaDataFieldProperty());
+        fieldProperties.add(new DsqlOrderMetaDataFieldProperty());
+        fieldProperties.add(new DsqlQueryOperatorsMetaDataFieldProperty(
+                SupportedOperatorsFactory.getInstance().getSupportedOperationsFor(metaDataModel.getDataType())));
         return fieldProperties;
     }
 
-	@Override
-	public List<MetaDataFieldProperty> getProperties(Class<?> clazz) {
-		List<MetaDataFieldProperty> fieldProperties = new ArrayList<MetaDataFieldProperty>();
+    public List<MetaDataFieldProperty> getProperties(Class<?> clazz) {
+        List<MetaDataFieldProperty> fieldProperties = new ArrayList<MetaDataFieldProperty>();
 
-		if (clazz.isEnum()) {
-			final List<String> enumValues = new ArrayList<String>();
-			for (Enum<?> e : (Enum[])clazz.getEnumConstants()) {
-				enumValues.add(e.name());
-			}
-			 
-			fieldProperties.add(new ValidStringValuesFieldProperty(enumValues.toArray(new String[enumValues.size()])));
-		}
+        if (clazz.isEnum()) {
+            final List<String> enumValues = new ArrayList<String>();
+            for (Enum<?> e : (Enum[])clazz.getEnumConstants()) {
+                enumValues.add(e.name());
+            }
+             
+            fieldProperties.add(new ValidStringValuesFieldProperty(enumValues.toArray(new String[enumValues.size()])));
+        }
 
-		return fieldProperties;
-	}
+        return fieldProperties;
+    }
 }

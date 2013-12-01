@@ -4,12 +4,12 @@ import java.util.List;
 
 public interface IDsqlNode {
 
-	public int getType();
+    public int getType();
 
-	public List<IDsqlNode> getChildren();
+    public List<IDsqlNode> getChildren();
 
-	public String getText();
+    public String getText();
 
-	public void accept(DsqlGrammarVisitor visitor);
+    public void accept(DsqlGrammarVisitor visitor);
 
 }

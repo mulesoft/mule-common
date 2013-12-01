@@ -9,24 +9,24 @@ import java.util.List;
  */
 public class ValidStringValuesFieldProperty implements MetaDataFieldProperty {
 
-	private List<String> validStrings = new ArrayList<String>();
-	
-	public ValidStringValuesFieldProperty() {
-	}
+    private List<String> validStrings = new ArrayList<String>();
 
-	public ValidStringValuesFieldProperty(String... values) {
-		validStrings.addAll(Arrays.asList(values));
-	}
-	
-	public List<String> getValidStrings() {
-		return validStrings;
-	}
+    public ValidStringValuesFieldProperty() {
+    }
 
-	public void setValidStrings(List<String> validStrings) {
-		this.validStrings = validStrings;
-	}
-	
-	public void addValue(String value) {
-		this.validStrings.add(value);
-	}
+    public ValidStringValuesFieldProperty(String... values) {
+        validStrings.addAll(Arrays.asList(values));
+    }
+
+    public List<String> getValidStrings() {
+        return validStrings;
+    }
+
+    public void setValidStrings(List<String> validStrings) {
+        this.validStrings = validStrings;
+    }
+
+    public void addValue(String value) {
+        this.validStrings.add(value);
+    }
 }

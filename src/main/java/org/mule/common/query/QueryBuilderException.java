@@ -5,12 +5,12 @@ package org.mule.common.query;
  */
 public class QueryBuilderException extends Exception {
 
-	private static final long serialVersionUID = 6047023569759420365L;
-	
-	public QueryBuilderException() {
-	}
-	
-	public QueryBuilderException(String text) {
-		super(text);
-	}
+    private static final long serialVersionUID = 6047023569759420365L;
+
+    public QueryBuilderException() {
+    }
+
+    public QueryBuilderException(String text) {
+        super(text);
+    }
 }

@@ -27,7 +27,7 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
         while (fieldIterable.hasNext())
         {
             String fieldName = addQuotesIfNeeded(fieldIterable.next().getName());
-			select.append(fieldName);
+            select.append(fieldName);
             if (fieldIterable.hasNext())
             {
                 select.append(",");
@@ -37,11 +37,11 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
         stringBuilder.insert(0, select);
     }
 
-	private String addQuotesIfNeeded(String name) {
-		return name.contains(" ") ? "'" + name + "'" : name;
-	}
+    private String addQuotesIfNeeded(String name) {
+        return name.contains(" ") ? "'" + name + "'" : name;
+    }
 
-	@Override
+    @Override
     public void visitTypes(List<Type> types)
     {
         stringBuilder.append(" FROM ");
@@ -49,7 +49,7 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
         while (typeIterator.hasNext())
         {
             String typeName = addQuotesIfNeeded(typeIterator.next().getName());
-			stringBuilder.append(typeName);
+            stringBuilder.append(typeName);
             if (typeIterator.hasNext())
             {
                 stringBuilder.append(",");
@@ -129,7 +129,7 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
     public void visitComparison(String operator, Field field, Value<?> value)
     {
         String name = addQuotesIfNeeded(field.getName());
-		stringBuilder.append(name).append(operator).append(value.toString());
+        stringBuilder.append(name).append(operator).append(value.toString());
     }
 
     @Override

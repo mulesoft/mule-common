@@ -7,20 +7,20 @@ package org.mule.common.metadata.field.property;
  */
 public class ExampleFieldProperty implements MetaDataFieldProperty {
 
-	private String exampleValue = "";
-	
-	public ExampleFieldProperty() {
-	}
+    private String exampleValue = "";
+    
+    public ExampleFieldProperty() {
+    }
 
-	public ExampleFieldProperty(String exampleValue) {
-		this.exampleValue = exampleValue;
-	}
+    public ExampleFieldProperty(String exampleValue) {
+        this.exampleValue = exampleValue;
+    }
 
-	public String getExampleValue() {
-		return exampleValue;
-	}
+    public String getExampleValue() {
+        return exampleValue;
+    }
 
-	public void setExampleValue(String exampleValue) {
-		this.exampleValue = exampleValue;
-	}
+    public void setExampleValue(String exampleValue) {
+        this.exampleValue = exampleValue;
+    }
 }

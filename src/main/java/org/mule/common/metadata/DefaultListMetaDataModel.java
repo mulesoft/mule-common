@@ -2,27 +2,24 @@ package org.mule.common.metadata;
 
 import org.mule.common.metadata.datatype.DataType;
 
-import java.util.List;
-
 public class DefaultListMetaDataModel extends AbstractMetaDataModel implements ListMetaDataModel {
 
-	private MetaDataModel model;
-	private boolean isArray;
-	
-	public DefaultListMetaDataModel(MetaDataModel model) {
-		this(model, false);
-	}
-	
-	public DefaultListMetaDataModel(MetaDataModel model, boolean isArray) {
-		super(DataType.LIST);
-		this.model = model;
-		this.isArray = isArray;
-	}
-	
-	@Override
-	public MetaDataModel getElementModel() {
-		return model;
-	}
+    private MetaDataModel model;
+    private boolean isArray;
+
+    public DefaultListMetaDataModel(MetaDataModel model) {
+        this(model, false);
+    }
+
+    public DefaultListMetaDataModel(MetaDataModel model, boolean isArray) {
+        super(DataType.LIST);
+        this.model = model;
+        this.isArray = isArray;
+    }
+
+    public MetaDataModel getElementModel() {
+        return model;
+    }
 
     @Override
     public int hashCode()
@@ -33,12 +30,11 @@ public class DefaultListMetaDataModel extends AbstractMetaDataModel implements L
         return result;
     }
     
-    @Override
-	public boolean isArray() {
-		return isArray;
-	}
+    public boolean isArray() {
+        return isArray;
+    }
 
-	@Override
+    @Override
     public boolean equals(Object obj)
     {
         if (this == obj) return true;
@@ -66,7 +62,6 @@ public class DefaultListMetaDataModel extends AbstractMetaDataModel implements L
         return sb.toString();
     }
 
-    @Override
     public void accept(MetaDataModelVisitor modelVisitor) {
         modelVisitor.visitListMetaDataModel(this);
     }
