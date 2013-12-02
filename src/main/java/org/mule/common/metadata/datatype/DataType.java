@@ -39,15 +39,15 @@ public enum DataType
 
     private String defaultImplementationClass;
 
-	private DataType(String defaultImplementationClass) {
-		this.defaultImplementationClass = defaultImplementationClass;
-	}
+    private DataType(String defaultImplementationClass) {
+        this.defaultImplementationClass = defaultImplementationClass;
+    }
 
-	public List<Operator> getSupportedOperators() {
-		return SupportedOperatorsFactory.getInstance().getSupportedOperationsFor(this);
-	}
+    public List<Operator> getSupportedOperators() {
+        return SupportedOperatorsFactory.getInstance().getSupportedOperationsFor(this);
+    }
 
-	public String getDefaultImplementationClass() {
-		return defaultImplementationClass;
-	}
+    public String getDefaultImplementationClass() {
+        return defaultImplementationClass;
+    }
 }

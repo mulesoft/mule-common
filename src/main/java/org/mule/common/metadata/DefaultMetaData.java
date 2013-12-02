@@ -12,15 +12,14 @@ package org.mule.common.metadata;
 
 public class DefaultMetaData implements MetaData
 {
-    
+
     private MetaDataModel payload;
-    
+
     public DefaultMetaData(MetaDataModel payload)
     {
         this.payload = payload;
     }
-    
-    @Override
+
     public MetaDataModel getPayload()
     {
         return payload;
@@ -56,5 +55,3 @@ public class DefaultMetaData implements MetaData
         return "DefaultMetaData: { payload: " + ((payload != null) ? payload.toString() : "null") + " }";
     }
 }
-
-

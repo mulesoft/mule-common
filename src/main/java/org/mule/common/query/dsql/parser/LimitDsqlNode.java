@@ -4,11 +4,11 @@ import org.antlr.runtime.Token;
 
 public class LimitDsqlNode extends DsqlNode {
 
-	public LimitDsqlNode(Token t) {
-		super(t);
-	}
+    public LimitDsqlNode(Token t) {
+        super(t);
+    }
 
-	public void accept(DsqlGrammarVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void accept(DsqlGrammarVisitor visitor) {
+        visitor.visit(this);
+    }
 }

@@ -16,11 +16,9 @@ public class MetaDataFailureType extends FailureType
 {
     public static final MetaDataFailureType ERROR_METADATA_KEYS_RETRIEVER = new MetaDataFailureType("ERROR_METADATA_KEYS_RETRIEVER");
     public static final MetaDataFailureType ERROR_METADATA_RETRIEVER = new MetaDataFailureType("ERROR_METADATA_RETRIEVER");
-    
+
     protected MetaDataFailureType(String name)
     {
         super(name);
     }
 }
-
-

@@ -12,7 +12,4 @@ package org.mule.common;
 
 public interface Capability
 {
-
 }
-
-

@@ -4,11 +4,11 @@ import org.antlr.runtime.Token;
 
 public class AndDsqlNode extends DsqlNode {
 
-	public AndDsqlNode(Token t) {
-		super(t);
-	}
+    public AndDsqlNode(Token t) {
+        super(t);
+    }
 
-	public void accept(DsqlGrammarVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void accept(DsqlGrammarVisitor visitor) {
+        visitor.visit(this);
+    }
 }

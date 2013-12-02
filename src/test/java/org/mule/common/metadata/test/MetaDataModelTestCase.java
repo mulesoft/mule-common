@@ -52,13 +52,13 @@ public class MetaDataModelTestCase
     @Test(expected = IllegalArgumentException.class)
     public void whenCsvUsedAsTypeForSimpleMetadataModelShouldFail()
     {
-    new DefaultSimpleMetaDataModel(DataType.CSV);
+        new DefaultSimpleMetaDataModel(DataType.CSV);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenJsonUsedAsTypeForSimpleMetadataModelShouldFail()
     {
-    new DefaultSimpleMetaDataModel(DataType.JSON);
+        new DefaultSimpleMetaDataModel(DataType.JSON);
     }
 
     @Test()
@@ -94,6 +94,3 @@ public class MetaDataModelTestCase
         Assert.assertThat(defaultParameterizedMapMetaDataModel.getValueMetaDataModel(), CoreMatchers.is(value));
     }
 }
-
-
-

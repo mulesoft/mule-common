@@ -21,12 +21,12 @@ public class DefaultResult<T> implements Result<T>
     private String message;
     private FailureType failureType;
     private String stacktrace;
-    
+
     public DefaultResult(T obj)
     {
         this(obj, Status.SUCCESS);
     }
-    
+
     public DefaultResult(T obj, TestResult.Status status)
     {
         this(obj, status, "");
@@ -34,7 +34,7 @@ public class DefaultResult<T> implements Result<T>
 
     public DefaultResult(T obj, TestResult.Status status, String message)
     {
-    	this(obj, status, message, (Status.FAILURE.equals(status)) ? FailureType.UNSPECIFIED : null, null);
+        this(obj, status, message, (Status.FAILURE.equals(status)) ? FailureType.UNSPECIFIED : null, null);
     }
 
     public DefaultResult(T obj, TestResult.Status status, String message, FailureType failureType, Throwable throwable)
@@ -45,43 +45,38 @@ public class DefaultResult<T> implements Result<T>
         this.failureType = failureType;
         if (throwable != null)
         {
-	        StringWriter sw = new StringWriter();
-	        PrintWriter pw = new PrintWriter(sw);
-	        throwable.printStackTrace(pw);
-	        this.stacktrace = sw.toString();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            throwable.printStackTrace(pw);
+            this.stacktrace = sw.toString();
         }
         else
         {
-        	this.stacktrace = null;
+            this.stacktrace = null;
         }
     }
-    
-    @Override
+
     public T get()
     {
         return obj;
     }
 
-    @Override
     public String getMessage()
     {
         return message;
     }
 
-    @Override
     public Status getStatus()
     {
         return status;
     }
 
-	@Override
-	public FailureType getFailureType() {
-		return failureType;
-	}
+    public FailureType getFailureType() {
+        return failureType;
+    }
 
-	@Override
-	public String getStacktrace() {
-		return stacktrace;
-	}
+    public String getStacktrace() {
+        return stacktrace;
+    }
 
 }

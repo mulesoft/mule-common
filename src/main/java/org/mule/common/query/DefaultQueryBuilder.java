@@ -38,7 +38,6 @@ public class DefaultQueryBuilder extends QueryBuilder {
         return this;
     }
 
-
     @Override
     public QueryBuilder setFilterExpression(Expression expression) {
         this.query.setFilterExpression(expression);
@@ -65,9 +64,9 @@ public class DefaultQueryBuilder extends QueryBuilder {
 
     @Override
     public DsqlQuery build() throws QueryBuilderException {
-    	if (query.getTypes().isEmpty()) {
-    		throw new QueryBuilderException("Empty types list");
-    	}
+        if (query.getTypes().isEmpty()) {
+            throw new QueryBuilderException("Empty types list");
+        }
         return this.query;
     }
 }

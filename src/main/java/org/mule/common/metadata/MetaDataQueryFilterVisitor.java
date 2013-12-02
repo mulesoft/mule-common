@@ -19,34 +19,28 @@ public class MetaDataQueryFilterVisitor implements MetaDataModelVisitor {
         this.resultModel = new DefaultSimpleMetaDataModel(DataType.VOID);
     }
 
-    @Override
     public void visitPojoModel(PojoMetaDataModel pojoMetaDataModel) {
         resultModel = pojoMetaDataModel;
     }
 
-    @Override
     public void visitListMetaDataModel(ListMetaDataModel listMetaDataModel) {
         MetaDataQueryFilterVisitor child = new MetaDataQueryFilterVisitor(fields);
         listMetaDataModel.getElementModel().accept(child);
         resultModel = new DefaultListMetaDataModel(child.filteringResult().getPayload());
     }
 
-    @Override
     public void visitSimpleMetaDataModel(SimpleMetaDataModel simpleMetaDataModel) {
         resultModel = simpleMetaDataModel;
     }
 
-    @Override
     public void visitStaticMapModel(ParameterizedMapMetaDataModel parameterizedMapMetaDataModel) {
         resultModel = parameterizedMapMetaDataModel;
     }
 
-    @Override
     public void visitXmlMetaDataModel(XmlMetaDataModel xmlMetaDataModel) {
-    	resultModel = xmlMetaDataModel;
+        resultModel = xmlMetaDataModel;
     }
-    
-    @Override
+
     public void visitDynamicMapModel(DefinedMapMetaDataModel definedMapMetaDataModel) {
         if (fields == null) return;
         Map<String,MetaDataModel> newMapModel = new HashMap<String, MetaDataModel>();

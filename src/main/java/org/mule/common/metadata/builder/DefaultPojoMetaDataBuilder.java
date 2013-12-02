@@ -21,7 +21,6 @@ public class DefaultPojoMetaDataBuilder<P extends MetaDataBuilder<?>> implements
         this.parentBuilder = parentBuilder;
     }
 
-    @Override
     public PojoMetaDataModel build()
     {
         if (factory == null)
@@ -31,15 +30,12 @@ public class DefaultPojoMetaDataBuilder<P extends MetaDataBuilder<?>> implements
         return new DefaultPojoMetaDataModel(pojoClass, factory);
     }
 
-
-    @Override
     public PojoMetaDataBuilder<P> usingFieldPropertyFactory(FieldPropertyFactory factory)
     {
         this.factory = factory;
         return this;
     }
 
-    @Override
     public P endPojo()
     {
         return parentBuilder;

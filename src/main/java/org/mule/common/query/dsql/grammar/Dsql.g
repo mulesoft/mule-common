@@ -21,29 +21,29 @@ options {
 }
 
 @parser::members {
-	protected Object recoverFromMismatchedToken(IntStream input,int ttype, BitSet follow) throws RecognitionException {
-	    //System.out.println("recoverFromMismatechedToken");
+    protected Object recoverFromMismatchedToken(IntStream input,int ttype, BitSet follow) throws RecognitionException {
+        //System.out.println("recoverFromMismatechedToken");
         MismatchedTokenException ex = new MismatchedTokenException(ttype, input);
-		throw new org.mule.common.query.dsql.parser.exception.DsqlParsingException("Invalid token at " + ex.line + ":" + ex.charPositionInLine);
-	}
-	
-	protected void mismatch(IntStream input, int ttype, BitSet follow) throws RecognitionException {
-		//System.out.println("mismatch");
+        throw new org.mule.common.query.dsql.parser.exception.DsqlParsingException("Invalid token at " + ex.line + ":" + ex.charPositionInLine);
+    }
+    
+    protected void mismatch(IntStream input, int ttype, BitSet follow) throws RecognitionException {
+        //System.out.println("mismatch");
         throw new MismatchedTokenException(ttype, input);
     }
 
     public Object recoverFromMismatchedSet(IntStream input, RecognitionException e, BitSet follow) throws RecognitionException {
-    	//System.out.println("recoverFromMismatechedSet");
+        //System.out.println("recoverFromMismatechedSet");
         throw e;
     }
 
     public void reportError(RecognitionException e) {
-    	//System.out.println("reportError");
+        //System.out.println("reportError");
         throw new org.mule.common.query.dsql.parser.exception.DsqlParsingException(e);
     }
 
     public void recover(RecognitionException e) {
-    	//System.out.println("recover");
+        //System.out.println("recover");
         throw new org.mule.common.query.dsql.parser.exception.DsqlParsingException(e);
     }
 }
@@ -74,7 +74,7 @@ orderBy:
     direction?;
 
 direction:
-	(ASC|DESC);
+    (ASC|DESC);
 
 limit:
     LIMIT^
@@ -153,41 +153,41 @@ fragment
 TWO_DIGIT: ('0'..'9') ('0'..'9');
 
 MULE_EXPRESSION
-	:	'#'NESTED_MULE_EXPRESSION;
+    :    '#'NESTED_MULE_EXPRESSION;
 
 fragment
 NESTED_MULE_EXPRESSION :
-	'['
-	(	options {greedy=false; k=2;}
-	: NESTED_MULE_EXPRESSION
-	| STRING_LITERAL
-	|	.
-	)*
-	']';
+    '['
+    (    options {greedy=false; k=2;}
+    : NESTED_MULE_EXPRESSION
+    | STRING_LITERAL
+    |    .
+    )*
+    ']';
 
 STRING_LITERAL:  
-	'\'' ( ESCAPE_SEQUENCE | ~('\\' | '\'') )* '\''
-	| '"' ( ESCAPE_SEQUENCE | ~('\\' | '"') )* '"'
-	;
+    '\'' ( ESCAPE_SEQUENCE | ~('\\' | '\'') )* '\''
+    | '"' ( ESCAPE_SEQUENCE | ~('\\' | '"') )* '"'
+    ;
 
 BOOLEAN_LITERAL: (T_ R_ U_ E_ | F_ A_ L_ S_ E_);
     
 fragment
 ESCAPE_SEQUENCE:   
-	'\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
+    '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
     |   UNICODE_ESCAPE
     ;
 
 fragment
 UNICODE_ESCAPE:   
-	'\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT;
+    '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT;
 
 fragment
 HEX_DIGIT: 
-	('0'..'9'|'a'..'f'|'A'..'F');
+    ('0'..'9'|'a'..'f'|'A'..'F');
 
 NUMBER_LITERAL:
-	('0'..'9'|'.')*; 
+    ('0'..'9'|'.')*; 
 
 IDENT : ('a'..'z' | 'A'..'Z' | '0'..'9'| '-' | '_' | '.')+
     | '[' ~(']')+ ']';

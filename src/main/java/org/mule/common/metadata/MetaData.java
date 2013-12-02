@@ -12,5 +12,5 @@ package org.mule.common.metadata;
 
 public interface MetaData
 {
-	MetaDataModel getPayload();
+    MetaDataModel getPayload();
 }

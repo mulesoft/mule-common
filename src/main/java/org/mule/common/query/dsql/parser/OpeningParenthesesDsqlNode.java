@@ -4,11 +4,11 @@ import org.antlr.runtime.Token;
 
 public class OpeningParenthesesDsqlNode extends DsqlNode {
 
-	public OpeningParenthesesDsqlNode(Token t) {
-		super(t);
-	}
+    public OpeningParenthesesDsqlNode(Token t) {
+        super(t);
+    }
 
-	public void accept(DsqlGrammarVisitor visitor) {
-		visitor.visit(this);
-	}
+    public void accept(DsqlGrammarVisitor visitor) {
+        visitor.visit(this);
+    }
 }

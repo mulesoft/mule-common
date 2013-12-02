@@ -2,7 +2,7 @@ package org.mule.common.query;
 
 import org.mule.common.query.expression.*;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

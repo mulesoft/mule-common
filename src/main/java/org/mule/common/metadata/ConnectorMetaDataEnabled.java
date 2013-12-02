@@ -13,6 +13,6 @@ public interface ConnectorMetaDataEnabled extends Capability
      * @return all (a best effort) MetaData that this connector works with. 
      */
     public Result<List<MetaDataKey>> getMetaDataKeys();
-    
+
     public Result<MetaData> getMetaData(MetaDataKey key);
 }

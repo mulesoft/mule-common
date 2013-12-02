@@ -5,7 +5,7 @@ package org.mule.common.query.expression;
  */
 
 public class NotEqualsOperator extends AbstractBinaryOperator {
-    @Override
+
     public String accept(OperatorVisitor operatorVisitor) {
         return operatorVisitor.notEqualsOperator();
     }

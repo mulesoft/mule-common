@@ -14,83 +14,79 @@ import org.mule.common.metadata.XmlMetaDataModel;
 
 public class DefaultXmlMetaDataBuilder<P extends MetaDataBuilder<?>> implements XmlMetaDataBuilder<P> {
 
-	public String name;
-	public String[] schemas;
-	public InputStream[] schemasStream;
-	public Charset encoding = Charset.forName("UTF-8");
-	public String example;
-	
-	public DefaultXmlMetaDataBuilder(String name) {
-		this.name = name;
-	}
-	
-	@Override
-	public XmlMetaDataModel build() {
-		XmlMetaDataModel model = null;
-		if (schemas != null) {
-			model = new DefaultXmlMetaDataModel(Arrays.asList(schemas), name, encoding);
-		} else if (schemasStream != null) {
+    public String name;
+    public String[] schemas;
+    public InputStream[] schemasStream;
+    public Charset encoding = Charset.forName("UTF-8");
+    public String example;
+    
+    public DefaultXmlMetaDataBuilder(String name) {
+        this.name = name;
+    }
 
-			List<String> result = new ArrayList<String>();
-	        for (InputStream schemaStream : schemasStream) {
-	            result.add(getStringFromInputStream(schemaStream, encoding));
-	        }
+    public XmlMetaDataModel build() {
+        XmlMetaDataModel model = null;
+        if (schemas != null) {
+            model = new DefaultXmlMetaDataModel(Arrays.asList(schemas), name, encoding);
+        } else if (schemasStream != null) {
 
-			model = new DefaultXmlMetaDataModel(result, name, encoding);
-		}
-		
-		return model;
-	}
+            List<String> result = new ArrayList<String>();
+            for (InputStream schemaStream : schemasStream) {
+                result.add(getStringFromInputStream(schemaStream, encoding));
+            }
 
-	private static String getStringFromInputStream(InputStream is, Charset encoding) {
-		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
+            model = new DefaultXmlMetaDataModel(result, name, encoding);
+        }
+        
+        return model;
+    }
 
-		String line;
-		try {
+    private static String getStringFromInputStream(InputStream is, Charset encoding) {
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
 
-			br = new BufferedReader(new InputStreamReader(is, encoding));
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-			}
+        String line;
+        try {
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+            br = new BufferedReader(new InputStreamReader(is, encoding));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
 
-		return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-	}
-	
-	public DefaultXmlMetaDataBuilder<P> addSchemaStringList(String... schemas) {
-		this.schemas = schemas;
-		this.schemasStream = null;
-		return this;
-	}
-	
-	public DefaultXmlMetaDataBuilder<P> addSchemaStreamList(InputStream... schemaStreams) {
-		this.schemasStream = schemaStreams;
-		this.schemas = null;
-		return this;
-	}
+        return sb.toString();
+    }
 
-	@Override
-	public DefaultXmlMetaDataBuilder<P> setEncoding(Charset encoding) {
-		this.encoding = encoding;
-		return this;
-	}
+    public DefaultXmlMetaDataBuilder<P> addSchemaStringList(String... schemas) {
+        this.schemas = schemas;
+        this.schemasStream = null;
+        return this;
+    }
 
-	@Override
-	public DefaultXmlMetaDataBuilder<P> setExample(String xmlExample) {
-		this.example = xmlExample;
-		return this;
-	}
+    public DefaultXmlMetaDataBuilder<P> addSchemaStreamList(InputStream... schemaStreams) {
+        this.schemasStream = schemaStreams;
+        this.schemas = null;
+        return this;
+    }
+
+    public DefaultXmlMetaDataBuilder<P> setEncoding(Charset encoding) {
+        this.encoding = encoding;
+        return this;
+    }
+
+    public DefaultXmlMetaDataBuilder<P> setExample(String xmlExample) {
+        this.example = xmlExample;
+        return this;
+    }
 }

@@ -13,5 +13,4 @@ package org.mule.common;
 public interface Testable extends Capability
 {
     TestResult test();
-
 }

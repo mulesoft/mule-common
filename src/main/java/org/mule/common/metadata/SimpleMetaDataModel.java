@@ -13,9 +13,6 @@ package org.mule.common.metadata;
 /**
  * Represents a simple type. Such as String, Integer, etc.
  */
-public interface SimpleMetaDataModel 
-	extends MetaDataModel
+public interface SimpleMetaDataModel extends MetaDataModel
 {
 }
-
-

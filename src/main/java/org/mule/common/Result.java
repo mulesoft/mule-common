@@ -13,13 +13,13 @@ package org.mule.common;
 public interface Result<T>
 {
     T get();
-    
+
     Status getStatus();
 
     String getMessage();
-    
+
     FailureType getFailureType();
-    
+
     String getStacktrace();
 
     public static enum Status

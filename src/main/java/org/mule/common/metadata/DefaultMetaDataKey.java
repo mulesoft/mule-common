@@ -12,15 +12,15 @@ package org.mule.common.metadata;
 
 public class DefaultMetaDataKey implements MetaDataKey, TypeMetaDataModel {
 
-	private String id;
-	private String displayName;
+    private String id;
+    private String displayName;
     private boolean isFromCapable = true;
 
-	public DefaultMetaDataKey(String id, String displayName) {
-		this.id = id;
-		this.displayName = displayName;
+    public DefaultMetaDataKey(String id, String displayName) {
+        this.id = id;
+        this.displayName = displayName;
         this.isFromCapable = true;
-	}
+    }
 
     public DefaultMetaDataKey(String id, String displayName, boolean isFromCapable) {
         this.id = id;
@@ -28,58 +28,53 @@ public class DefaultMetaDataKey implements MetaDataKey, TypeMetaDataModel {
         this.isFromCapable = isFromCapable;
     }
 
-	@Override
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	@Override
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	@Override
-	public String toString() {
-		return "DefaultMetaDataKey:{ displayName:" + displayName + " id:" + id + " }";
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		DefaultMetaDataKey other = (DefaultMetaDataKey) obj;
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int compareTo(MetaDataKey otherMetadataKey) {
-		return id.compareTo(otherMetadataKey.getId());
-	}
+    public String getDisplayName() {
+        return displayName;
+    }
 
     @Override
+    public String toString() {
+        return "DefaultMetaDataKey:{ displayName:" + displayName + " id:" + id + " }";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        DefaultMetaDataKey other = (DefaultMetaDataKey) obj;
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    public int compareTo(MetaDataKey otherMetadataKey) {
+        return id.compareTo(otherMetadataKey.getId());
+    }
+
     public boolean isFromCapable() {
         return isFromCapable;
     }

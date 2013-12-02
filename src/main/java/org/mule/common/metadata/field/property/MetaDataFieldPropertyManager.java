@@ -28,7 +28,7 @@ public class  MetaDataFieldPropertyManager {
      * @return a MetaDataFieldProperty if the current manager has a fieldPropertyClass, null otherwise
      */
     @SuppressWarnings("unchecked")
-	public <T extends MetaDataFieldProperty> T getProperty(Class<T> fieldPropertyClass){
+    public <T extends MetaDataFieldProperty> T getProperty(Class<T> fieldPropertyClass){
         for (MetaDataFieldProperty fc : this.fieldProperties){
             if (fieldPropertyClass.equals(fc.getClass())){
                 return (T) fc;

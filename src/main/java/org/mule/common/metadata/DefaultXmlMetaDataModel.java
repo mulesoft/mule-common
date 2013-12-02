@@ -16,17 +16,16 @@ public class DefaultXmlMetaDataModel extends AbstractMetaDataModel implements Xm
 	private String example;
 
     public DefaultXmlMetaDataModel(List<String> schemas, String rootElement, Charset encoding) {
-    	super(DataType.XML);
-    	this.schemas = schemas;
-    	this.rootElement = rootElement;
-    	this.encoding = encoding;
+        super(DataType.XML);
+        this.schemas = schemas;
+        this.rootElement = rootElement;
+        this.encoding = encoding;
     }
 
     public String getRootElement() {
         return rootElement;
     }
 
-    @Override
     public List<InputStream> getSchemas() {
         List<InputStream> result = new ArrayList<InputStream>();
         for (String schema : schemas) {
@@ -35,18 +34,15 @@ public class DefaultXmlMetaDataModel extends AbstractMetaDataModel implements Xm
         return result;
     }
 
-	@Override
-    public void accept(MetaDataModelVisitor modelVisitor) {
-    	modelVisitor.visitXmlMetaDataModel(this);
+	public void accept(MetaDataModelVisitor modelVisitor) {
+        modelVisitor.visitXmlMetaDataModel(this);
     }
 
-	@Override
-	public String getExample() {
-		return example;
-	}
+    public String getExample() {
+        return example;
+    }
 
-	@Override
-	public void setExample(String xmlExample) {
-		this.example = xmlExample;
-	}
+    public void setExample(String xmlExample) {
+        this.example = xmlExample;
+    }
 }

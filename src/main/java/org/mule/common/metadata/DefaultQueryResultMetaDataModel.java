@@ -19,41 +19,34 @@ public class DefaultQueryResultMetaDataModel implements QueryResultMetaDataModel
         this.definedMapMetaDataModel = definedMapMetaDataModel;
     }
 
-    @Override
     public String getName()
     {
         return definedMapMetaDataModel.getName();
     }
 
-    @Override
     public Set<String> getKeys() {
         return definedMapMetaDataModel.getKeys();
     }
 
-    @Override
     public MetaDataModel getKeyMetaDataModel()
     {
         return definedMapMetaDataModel.getKeyMetaDataModel();
     }
 
-    @Override
     public MetaDataModel getValueMetaDataModel(String key)
     {
         return definedMapMetaDataModel.getValueMetaDataModel(key);
     }
 
-    @Override
     public List<MetaDataField> getFields() {
         return definedMapMetaDataModel.getFields();
     }
 
-    @Override
     public DataType getDataType()
     {
         return definedMapMetaDataModel.getDataType();
     }
 
-    @Override
     public <T extends MetaDataModel> T as(Class<T> clazz) {
         if ((clazz.isAssignableFrom(this.getClass())))
         {
@@ -62,15 +55,13 @@ public class DefaultQueryResultMetaDataModel implements QueryResultMetaDataModel
         return null;
     }
 
-    @Override
     public void accept(MetaDataModelVisitor modelVisitor)
     {
         modelVisitor.visitDynamicMapModel(this);
     }
 
-	@Override
-	public String getImplementationClass() {
-		return definedMapMetaDataModel.getImplementationClass();
-	}
+    public String getImplementationClass() {
+        return definedMapMetaDataModel.getImplementationClass();
+    }
 
 }

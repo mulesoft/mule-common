@@ -38,7 +38,6 @@ public class DefaultFieldPropertyFactoryTestCase {
         assertThat((DsqlOrderMetaDataFieldProperty) metaDataFieldPropertyList.get(2), CoreMatchers.is(DsqlOrderMetaDataFieldProperty.class));
         assertThat("Operators should not be empty", ((DsqlQueryOperatorsMetaDataFieldProperty) metaDataFieldPropertyList.get(3)).getSupportedOperators().isEmpty(), CoreMatchers.is(false));
 
-
         mdm = new DefaultSimpleMetaDataModel(DataType.NUMBER);
         metaDataFieldPropertyList = defaultFieldFeatureFactory.getProperties("SomeFieldName", mdm);
         assertNotNull("the capabilities list should not be empty", metaDataFieldPropertyList);

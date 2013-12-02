@@ -10,5 +10,5 @@ public interface MetaDataModel {
 
     void accept(MetaDataModelVisitor modelVisitor);
 
-	String getImplementationClass();
+    String getImplementationClass();
 }

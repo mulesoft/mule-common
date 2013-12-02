@@ -14,38 +14,38 @@ import org.mule.common.query.dsql.parser.exception.DsqlParsingException;
 
 public class MuleDsqlParser {
 
-	public DsqlQuery parse(final String string) {
+    public DsqlQuery parse(final String string) {
         String parseString = string;
         if (string.startsWith("dsql:")) {
             parseString = string.substring(5);
         }
-		CharStream antlrStringStream = new ANTLRStringStream(parseString);
-		DsqlLexer dsqlLexer = new DsqlLexer(antlrStringStream);
-		CommonTokenStream dsqlTokens = new CommonTokenStream();
-		dsqlTokens.setTokenSource(dsqlLexer);
-		
-		DsqlParser dsqlParser = new DsqlParser(dsqlTokens);
-		dsqlParser.setTreeAdaptor(new DsqlTreeAdaptor());
-		return parse(dsqlParser);
-	}
+        CharStream antlrStringStream = new ANTLRStringStream(parseString);
+        DsqlLexer dsqlLexer = new DsqlLexer(antlrStringStream);
+        CommonTokenStream dsqlTokens = new CommonTokenStream();
+        dsqlTokens.setTokenSource(dsqlLexer);
+        
+        DsqlParser dsqlParser = new DsqlParser(dsqlTokens);
+        dsqlParser.setTreeAdaptor(new DsqlTreeAdaptor());
+        return parse(dsqlParser);
+    }
 
-	private DsqlQuery parse(DsqlParser dsqlParser) {
-		try {
-			select_return select = dsqlParser.select();
-			DsqlNode tree = (DsqlNode) select.getTree();
-			return buildQuery(tree).build();
-		} catch (RecognitionException e) {
-			throw new DsqlParsingException(e);
-		} catch (QueryBuilderException e) {
-			throw new DsqlParsingException(e);
-		}
-	}
+    private DsqlQuery parse(DsqlParser dsqlParser) {
+        try {
+            select_return select = dsqlParser.select();
+            DsqlNode tree = (DsqlNode) select.getTree();
+            return buildQuery(tree).build();
+        } catch (RecognitionException e) {
+            throw new DsqlParsingException(e);
+        } catch (QueryBuilderException e) {
+            throw new DsqlParsingException(e);
+        }
+    }
 
-	private QueryBuilder buildQuery(DsqlNode dsqlRootNode) {
-		DefaultDsqlGrammarVisitor visitor = new DefaultDsqlGrammarVisitor();
-		dsqlRootNode.accept(visitor);
-		
-		return visitor.getQueryBuilder();
-	}
-	
+    private QueryBuilder buildQuery(DsqlNode dsqlRootNode) {
+        DefaultDsqlGrammarVisitor visitor = new DefaultDsqlGrammarVisitor();
+        dsqlRootNode.accept(visitor);
+        
+        return visitor.getQueryBuilder();
+    }
+    
 }

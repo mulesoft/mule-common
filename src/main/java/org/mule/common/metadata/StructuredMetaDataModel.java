@@ -7,6 +7,5 @@ import java.util.List;
  */
 public interface StructuredMetaDataModel extends MetaDataModel
 {
-
     List<MetaDataField> getFields();
 }

@@ -21,18 +21,16 @@ public class FailureType
     public static final FailureType UNSPECIFIED = new FailureType("UNSPECIFIED");
     public static final FailureType UNKNOWN_METADATA_KEY = new FailureType("UNKNOWN_METADATA_KEY");
     public static final FailureType NO_DATASENSE_AVAILABLE = new FailureType("NO_DATASENSE_AVAILABLE");
-    
-    
+
     private String name;
-    
+
     protected FailureType(String name)
     {
         this.name = name;
     }
-    
+
     public String getName()
     {
         return name;
     }
 }
-
