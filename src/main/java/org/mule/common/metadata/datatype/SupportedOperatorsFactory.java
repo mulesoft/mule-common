@@ -46,6 +46,7 @@ public class SupportedOperatorsFactory {
             case CSV:
             case JSON:
             case FLATFILE:
+            case EXCEL:
             default:
                 return new ArrayList<Operator>();
         }
