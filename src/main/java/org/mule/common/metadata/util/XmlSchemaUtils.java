@@ -3,6 +3,8 @@ package org.mule.common.metadata.util;
 import org.mule.common.metadata.XmlMetaDataFieldFactory;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -29,7 +31,14 @@ public class XmlSchemaUtils {
         options.setCompileDownloadUrls();
         if (source != null) {
             options.put(XmlOptions.DOCUMENT_SOURCE_NAME, source.toString());
-            options.put("BASE_URI", PathUtilities.extractDirectoryPath(source.toString()));
+            try
+            {
+                options.put("BASE_URI", new URI(PathUtilities.extractDirectoryPath(source.toString())));
+            }
+            catch (URISyntaxException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
 
         /* Load the schema */
