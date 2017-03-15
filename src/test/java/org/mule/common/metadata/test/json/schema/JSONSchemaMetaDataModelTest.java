@@ -264,9 +264,6 @@ public class JSONSchemaMetaDataModelTest {
         Assert.assertThat(model.getFields().get(1).getName(), CoreMatchers.is("warehouseLocation"));
         Assert.assertThat(model.getFields().get(1).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.LIST));
         Assert.assertThat(model.getFields().get(1).getMetaDataModel(), CoreMatchers.instanceOf(ListMetaDataModel.class));
-
-        ListMetaDataModel listMetaDataModel = (ListMetaDataModel) model.getFields().get(1).getMetaDataModel();
-        Assert.assertThat(listMetaDataModel.getDataType(), CoreMatchers.is(DataType.LIST));
     }
 
     @Test
