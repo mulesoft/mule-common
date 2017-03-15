@@ -1,0 +1,14 @@
+{
+  "title": "product",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The unique identifier for a product",
+      "type": "number"
+    },
+    "warehouseLocation": {
+      "description": "Coordinates of the warehouse with the product",
+      "$ref": "https://raw.githubusercontent.com/mulesoft/mule-common/3.x/src/test/resources/jsonSchema/emptyItemsSchema.json"
+    }
+  }
+}

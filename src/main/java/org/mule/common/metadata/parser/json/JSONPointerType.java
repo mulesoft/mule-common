@@ -130,8 +130,7 @@ public class JSONPointerType implements JSONType
 
     public JSONObject getRemoteSchema(URL url)
     {
-
-        java.lang.String urlProtocol = url.getProtocol();
+        String urlProtocol = url.getProtocol();
         if (urlProtocol.equals("file"))
         {
 
@@ -163,7 +162,7 @@ public class JSONPointerType implements JSONType
             }
 
         }
-        else if (urlProtocol.equals("http"))
+        else if (urlProtocol.equals("http") || urlProtocol.equals("https"))
         {
 
             BufferedReader rd = null;
