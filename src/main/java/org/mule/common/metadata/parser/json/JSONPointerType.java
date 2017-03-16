@@ -67,7 +67,7 @@ public class JSONPointerType implements JSONType
             {
                 url = new URL(baseURI);
                 remoteSchema = getRemoteSchema(url);
-                environment = new SchemaEnv(env, remoteSchema);
+                environment = createSchemaEnv(env, remoteSchema);
             }
             catch (MalformedURLException e)
             {
@@ -78,7 +78,7 @@ public class JSONPointerType implements JSONType
                 {
                     urlFile = new URL(contextJsonURL, baseURI);
                     remoteSchema = getRemoteSchema(urlFile);
-                    environment = new SchemaEnv(env, remoteSchema);
+                    environment = createSchemaEnv(env, remoteSchema);
                 }
                 catch (MalformedURLException e1)
                 {
@@ -88,9 +88,9 @@ public class JSONPointerType implements JSONType
             }
         }
 
-
         // See if it has already been resolved if base URI is empty or matches this schema's id
         JSONObject contextJsonObject = environment.getContextJsonObject();
+        
         if (baseURI.equals("") || (contextJsonObject.has("id") && baseURI.equals(contextJsonObject.get("id"))))
         {
             referenceType = environment.lookupType(jsonPointer);
@@ -125,6 +125,15 @@ public class JSONPointerType implements JSONType
             return referenceType;
         }
         return null;
+    }
+
+    private SchemaEnv createSchemaEnv(SchemaEnv parentEnv, JSONObject remoteSchema) 
+    {
+        SchemaEnv environment = new SchemaEnv(parentEnv, remoteSchema);
+        // register root type in new env
+        JSONType rootType = environment.evaluate(remoteSchema);
+        environment.addType(HASH, rootType);
+        return environment;
     }
 
 

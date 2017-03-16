@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://webservices.creditsafe.com/GlobalData/1.3cs/schema/GGS/report/additional-information.json",
+  
+  "type":"object",
+  "properties": {
+    "additionalInformation": { "$ref": "http://webservices.creditsafe.com/GlobalData/1.3cs/schema/GGS/report/additional-information.json#" }
+  }
+}

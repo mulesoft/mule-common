@@ -1,0 +1,7 @@
+{
+    "description": "An object with a ref",
+    "type": "object",
+    "properties": {
+        "position": { "$ref": "warehouseLocationSchema.json#" }
+    }
+}
