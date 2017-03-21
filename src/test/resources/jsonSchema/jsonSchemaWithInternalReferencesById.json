@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "agreement.json",
+  "type": "object",
+  "properties" : {
+  	"refById" : { "$ref" : "#Overeenkomst"}
+  },
+  "definitions": {
+    "overeenkomst":{
+      "id": "#Overeenkomst",
+	  "type": "object",
+	  "allOf": [
+	    {
+	      "$ref": "#BusinessModelObject"
+	    }
+	  ],
+	  "properties": {
+	    "aantalDeelnemerschappen": {
+	      "type": "integer"
+	    },
+	    "alternatieveCorrespondentie": {
+	      "type": "string"
+	    },
+	    "betaalwijze": {
+	      "enum": [
+	        "Overboeking",
+	        "SEPA"
+	      ]
+	    }
+	  }
+    }
+  }
+}
