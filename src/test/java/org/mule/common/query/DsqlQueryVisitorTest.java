@@ -2,6 +2,13 @@ package org.mule.common.query;
 
 import org.mule.common.query.expression.*;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang.math.RandomUtils;
+import org.hamcrest.collection.IsCollectionWithSize;
+import org.hamcrest.core.IsCollectionContaining;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,8 +16,135 @@ import org.junit.Test;
  * Test for query visitor
  */
 public class DsqlQueryVisitorTest
-{
+{  
+    private static final List<String> KEYWORDS = Arrays.asList("ASC", "DESC", "SELECT", "FROM", "WHERE", "ORDER", "BY", "LIMIT", "OFFSET", "AND", "OR", "NOT", "LIKE");
 
+    @Test
+    public void ensureAllKeywordsAreTested() 
+    {
+        Assert.assertThat(KEYWORDS, IsCollectionWithSize.hasSize(DsqlKeyword.values().length));
+        for (DsqlKeyword keyword : DsqlKeyword.values()) 
+        {
+            Assert.assertThat(KEYWORDS, IsCollectionContaining.hasItem(keyword.toString()));
+        }
+    }
+
+    @Test
+    public void whenUsingKeywordsAsFieldsTheyShouldBeQuoted() 
+    {
+        for (String keyword : getRandomlyCapitalizedKeywords()) 
+        {
+            QueryBuilder queryBuilder = new DefaultQueryBuilder();
+            queryBuilder.addField(new Field("name", "string"));
+            queryBuilder.addField(new Field(keyword, "string"));
+            queryBuilder.addType(new Type("Account"));
+
+            DsqlQueryVisitor visitor = new DsqlQueryVisitor();
+            try 
+            {
+                queryBuilder.build().accept(visitor);
+            } 
+            catch (QueryBuilderException e) 
+            {
+            }
+            Assert.assertEquals("SELECT name,'" + keyword + "' FROM Account", visitor.dsqlQuery());
+        }
+    }
+
+    @Test
+    public void whenUsingKeywordsInWhereTheyShouldBeQuoted() 
+    {
+        for (String keyword : getRandomlyCapitalizedKeywords()) 
+        {
+            QueryBuilder queryBuilder = new DefaultQueryBuilder();
+            queryBuilder.addField(new Field("name", "string"));
+            Field keywordField = new Field(keyword, "string");
+            queryBuilder.addField(keywordField);
+            queryBuilder.addType(new Type("Account"));
+            Expression newExp = new FieldComparation(new GreaterOperator(), keywordField, new StringValue("foo"));
+            queryBuilder.setFilterExpression(newExp);
+
+            DsqlQueryVisitor visitor = new DsqlQueryVisitor();
+            try 
+            {
+                queryBuilder.build().accept(visitor);
+            } 
+            catch (QueryBuilderException e) 
+            {
+            }
+            Assert.assertEquals("SELECT name,'" + keyword + "' FROM Account WHERE '" + keyword + "' > 'foo'", visitor.dsqlQuery());
+        }
+    }
+
+    @Test
+    public void whenUsingKeywordsAsTypesTheyShouldBeQuoted() 
+    {
+        for (String keyword : getRandomlyCapitalizedKeywords()) 
+        {
+            QueryBuilder queryBuilder = new DefaultQueryBuilder();
+            queryBuilder.addField(new Field("name", "string"));
+            queryBuilder.addField(new Field("lastName", "string"));
+            queryBuilder.addType(new Type(keyword));
+
+            DsqlQueryVisitor visitor = new DsqlQueryVisitor();
+            try 
+            {
+                queryBuilder.build().accept(visitor);
+            }
+            catch (QueryBuilderException e) 
+            {
+            }
+            Assert.assertEquals("SELECT name,lastName FROM '" + keyword + "'", visitor.dsqlQuery());
+        }
+    }
+
+    private List<String> getRandomlyCapitalizedKeywords() 
+    {
+        List<String> result = new LinkedList<String>();
+        for (String keyword : KEYWORDS) 
+        {
+            if (RandomUtils.nextBoolean()) 
+            {
+                String capitalized = "";
+                for (int i = 0; i < keyword.length(); i++) 
+                {
+                    char nextChar = keyword.charAt(i);
+                    capitalized += RandomUtils.nextBoolean() ? Character.toUpperCase(nextChar) : Character.toLowerCase(nextChar);
+                }
+                result.add(capitalized);
+            } 
+            else 
+            {
+                result.add(keyword);
+            }
+        }
+        return result;
+    }
+
+    @Test
+    public void whenUsingKeywordsInOrderByShouldBeQuoted() 
+    {
+        for (String keyword : KEYWORDS) 
+        {
+            QueryBuilder queryBuilder = new DefaultQueryBuilder();
+            queryBuilder.addField(new Field("name", "string"));
+            Field keywordField = new Field(keyword, "string");
+            queryBuilder.addField(keywordField);
+            queryBuilder.addType(new Type("Account"));
+            queryBuilder.addOrderByField(keywordField);
+
+            DsqlQueryVisitor visitor = new DsqlQueryVisitor();
+            try 
+            {
+                queryBuilder.build().accept(visitor);
+            }
+            catch (QueryBuilderException e) 
+            {
+            }
+            Assert.assertEquals("SELECT name,'" + keyword + "' FROM Account ORDER BY '" + keyword + "' ASC", visitor.dsqlQuery());
+        }
+    }
+    
     @Test
     public void testBasicQueryVisitor()
     {
