@@ -68,11 +68,11 @@ public class DefaultDefinedMapMetaDataModelTestCase {
 	public void testFields() {
 		assertNotNull(mapMetaDataModel.getFields());
 		assertEquals(2, mapMetaDataModel.getFields().size());
-		assertTrue(mapMetaDataModel.getFields().get(1).getMetaDataModel().getDataType().equals(DataType.STRING));
-		assertTrue(mapMetaDataModel.getFields().get(0).getMetaDataModel().getDataType().equals(DataType.NUMBER));
+		assertTrue(mapMetaDataModel.getFieldByName("field1").getMetaDataModel().getDataType().equals(DataType.STRING));
+		assertTrue(mapMetaDataModel.getFieldByName("field2").getMetaDataModel().getDataType().equals(DataType.NUMBER));
 	}
 
-	@Test
+    @Test
 	public void whenCreatingModelFromMapsWithMapsFieldsShouldBeCreatedCorrectly() {
 
 		final DynamicObjectBuilder<?> container = new DefaultMetaDataBuilder().createDynamicObject("Container");
@@ -112,8 +112,8 @@ public class DefaultDefinedMapMetaDataModelTestCase {
 		Assert.assertThat(metaDataModel.getValueMetaDataModel("enumField").getDataType(), is(DataType.ENUM));
 		Assert.assertThat(metaDataModel.getValueMetaDataModel("intField").getDataType(), is(DataType.INTEGER));
 
-		Assert.assertThat(metaDataModel.getFields().get(1), notNullValue());
-		MetaDataField metaDataField = metaDataModel.getFields().get(1);
+		Assert.assertThat(metaDataModel.getFieldByName("enumField"), notNullValue());
+		MetaDataField metaDataField = metaDataModel.getFieldByName("enumField");
         Assert.assertThat("When undefined implementation class, the default must return the same as the DataType", metaDataField.getMetaDataModel().getImplementationClass(), is(DataType.ENUM.getDefaultImplementationClass()));
 
 		Assert.assertThat(metaDataField.getProperty(ValidStringValuesFieldProperty.class), notNullValue());
@@ -147,8 +147,8 @@ public class DefaultDefinedMapMetaDataModelTestCase {
         Assert.assertThat(metaDataModel.getValueMetaDataModel("enumField").getDataType(), is(DataType.ENUM));
         Assert.assertThat(metaDataModel.getValueMetaDataModel("intField").getDataType(), is(DataType.INTEGER));
 
-        Assert.assertThat(metaDataModel.getFields().get(1), notNullValue());
-        MetaDataField metaDataField = metaDataModel.getFields().get(1);
+        Assert.assertThat(metaDataModel.getFieldByName("enumField"), notNullValue());
+        MetaDataField metaDataField = metaDataModel.getFieldByName("enumField");
         Assert.assertThat("When defined implementation class, the value must be the specified value", metaDataField.getMetaDataModel().getImplementationClass(), is(EnumTest.class.getName()));
 
         Assert.assertThat(metaDataField.getProperty(ValidStringValuesFieldProperty.class), notNullValue());
@@ -340,7 +340,7 @@ public class DefaultDefinedMapMetaDataModelTestCase {
                 .addSimpleField("Name", DataType.STRING)
                 .addList("addresses").ofSimpleField(DataType.STRING).build();
         Assert.assertThat(family.getFields().size(), is(2));
-        MetaDataField metaDataField = family.getFields().get(1);
+        MetaDataField metaDataField = family.getFieldByName("addresses");
         Assert.assertThat(metaDataField.getMetaDataModel().getDataType(), is(DataType.LIST));
         Assert.assertThat(((ListMetaDataModel)metaDataField.getMetaDataModel()).getElementModel().getDataType(), is(DataType.STRING));
     }
