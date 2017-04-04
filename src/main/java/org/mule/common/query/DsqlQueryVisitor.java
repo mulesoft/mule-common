@@ -1,5 +1,7 @@
 package org.mule.common.query;
 
+import static org.mule.common.query.DsqlKeyword.*;
+
 import org.mule.common.query.expression.*;
 
 import java.util.Iterator;
@@ -22,7 +24,8 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
     public void visitFields(List<Field> fields)
     {
         StringBuilder select = new StringBuilder();
-        select.append("SELECT ");
+        select.append(SELECT);
+        select.append(" ");
         Iterator<Field> fieldIterable = fields.iterator();
         while (fieldIterable.hasNext())
         {
@@ -37,14 +40,30 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
         stringBuilder.insert(0, select);
     }
 
-	private String addQuotesIfNeeded(String name) {
-		return name.contains(" ") ? "'" + name + "'" : name;
-	}
+    private String addQuotesIfNeeded(String name) 
+    {
+        String result = name;
+        if (name.contains(" ") || isKeywordIgnoreCase(name)) 
+        {
+            result = addQuotes(name);
+        }
+        return result;
+    }
+
+    private String addQuotes(String typeName) 
+    {
+        StringBuilder result = new StringBuilder(typeName);
+        result.insert(0, '\'');
+        result.append('\'');
+        return result.toString();
+    }
 
 	@Override
     public void visitTypes(List<Type> types)
     {
-        stringBuilder.append(" FROM ");
+        stringBuilder.append(" ");
+        stringBuilder.append(FROM);
+        stringBuilder.append(" ");
         Iterator<Type> typeIterator = types.iterator();
         while (typeIterator.hasNext())
         {
@@ -60,7 +79,11 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
     @Override
     public void visitOrderByFields(List<Field> orderByFields, Direction direction)
     {
-        stringBuilder.append(" ORDER BY ");
+        stringBuilder.append(" ");
+        stringBuilder.append(ORDER);
+        stringBuilder.append(" ");
+        stringBuilder.append(BY);
+        stringBuilder.append(" ");
         Iterator<Field> orderByFieldsIterator = orderByFields.iterator();
         while (orderByFieldsIterator.hasNext())
         {
@@ -79,7 +102,9 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
     @Override
     public void visitBeginExpression()
     {
-        stringBuilder.append(" WHERE ");
+        stringBuilder.append(" ");
+        stringBuilder.append(WHERE);
+        stringBuilder.append(" ");
     }
 
     @Override
@@ -97,13 +122,17 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
     @Override
     public void visitLimit(int limit)
     {
-        stringBuilder.append(" LIMIT ").append(limit);
+        stringBuilder.append(" ");
+        stringBuilder.append(LIMIT);
+        stringBuilder.append(" ").append(limit);
     }
 
     @Override
     public void visitOffset(int offset)
     {
-        stringBuilder.append(" OFFSET ").append(offset);
+        stringBuilder.append(" ");
+        stringBuilder.append(OFFSET);
+        stringBuilder.append(" ").append(offset);
     }
 
     @Override
@@ -115,14 +144,18 @@ public class DsqlQueryVisitor extends DefaultQueryVisitor
     @Override
     public void visitAnd()
     {
-        stringBuilder.append(" AND ");
+        stringBuilder.append(" ");
+        stringBuilder.append(AND);
+        stringBuilder.append(" ");
     }
 
 
     @Override
     public void visitOR()
     {
-        stringBuilder.append(" OR ");
+        stringBuilder.append(" ");
+        stringBuilder.append(OR);
+        stringBuilder.append(" ");
     }
 
     @Override
