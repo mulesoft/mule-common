@@ -12,7 +12,13 @@ package org.mule.common.metadata;
 
 import org.mule.common.metadata.datatype.DataType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
 
 /**
  * <p>Dynamic Object metadata representation</p>
@@ -45,7 +51,8 @@ public class DefaultDefinedMapMetaDataModel extends AbstractStructuredMetaDataMo
 
     private static List<MetaDataField> convertMapToList(Map<String, ? extends MetaDataModel> metaDataModelMap) {
         List<MetaDataField> mappedFields = new ArrayList<MetaDataField>();
-        for (Map.Entry<String, ? extends MetaDataModel> entry : metaDataModelMap.entrySet()) {
+        Map<String, ? extends MetaDataModel> metaDataModelMapOrderByName = new TreeMap<String, MetaDataModel>(metaDataModelMap);
+        for (Map.Entry<String, ? extends MetaDataModel> entry : metaDataModelMapOrderByName.entrySet()) {
             mappedFields.add(new DefaultMetaDataField(entry.getKey(), entry.getValue()));
         }
         return mappedFields;

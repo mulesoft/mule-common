@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +85,7 @@ public class MetaDataModelFactory
 			
 			Class<?> raw = TypeResolver.erase(type);
 			
-			if (Collection.class.isAssignableFrom(raw)) {				
+			if (Collection.class.isAssignableFrom(raw)) {
 				return  new DefaultListMetaDataModel(parseType(paramType.getActualTypeArguments()[0], context, featureFactory));
 			}
 			if (Map.class.isAssignableFrom(raw)) {				
@@ -256,7 +256,7 @@ public class MetaDataModelFactory
 
     public Set<String> getParentNames(Class<?> clazz)
     {
-        Set<String> parents = new HashSet<String>();
+        Set<String> parents = new LinkedHashSet<String>();
         for (Class<?> c : clazz.getInterfaces())
         {
             if (c != null)
