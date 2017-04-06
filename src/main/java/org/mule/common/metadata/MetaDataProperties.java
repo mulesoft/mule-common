@@ -1,9 +1,8 @@
 package org.mule.common.metadata;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import org.apache.commons.lang.ObjectUtils;
+
+import java.util.*;
 
 /**
  *
@@ -20,7 +19,7 @@ public class MetaDataProperties
 
     public MetaDataProperties()
     {
-        this(new HashSet<MetaDataField>());
+        this(new TreeSet<MetaDataField>(new MetaDataFieldComparator()));
     }
 
     public Set<MetaDataField> getFields()
@@ -78,5 +77,11 @@ public class MetaDataProperties
         return false;
     }
 
+    private static class MetaDataFieldComparator implements Comparator<MetaDataField> {
 
+        @Override
+        public int compare(MetaDataField field1, MetaDataField field2) {
+            return ObjectUtils.compare(field1.getName(), field2.getName());
+        }
+    }
 }
