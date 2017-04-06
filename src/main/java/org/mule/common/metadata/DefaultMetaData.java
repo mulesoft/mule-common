@@ -13,8 +13,8 @@ package org.mule.common.metadata;
 import org.mule.common.metadata.field.property.MetaDataFieldProperty;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Default implementation for encapsulate the {@link MetaDataModel}.
@@ -32,7 +32,7 @@ public class DefaultMetaData implements MetaData
     public DefaultMetaData(MetaDataModel payload)
     {
         this.payload = payload;
-        this.properties = new HashMap<MetaDataPropertyScope, MetaDataProperties>();
+        this.properties = new TreeMap<MetaDataPropertyScope, MetaDataProperties>();
         initProperties();
     }
 

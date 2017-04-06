@@ -1,14 +1,14 @@
 package org.mule.common.metadata;
 
 import javax.xml.namespace.QName;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class XmlMetaDataNamespaceManager {
 
     private static final String PREFIX = "ns";
 
-    private Map<String, String> namespacePrefix = new HashMap<String, String>();
+    private Map<String, String> namespacePrefix = new TreeMap<String, String>();
 
     public XmlMetaDataNamespaceManager() {
     }
