@@ -13,6 +13,8 @@ import static org.junit.Assert.*;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 public class JSONSchemaMetaDataModelTest {
 
@@ -145,6 +147,30 @@ public class JSONSchemaMetaDataModelTest {
         Assert.assertThat(model.getFields().get(0).getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
 
         assertWarehouseLocationModel((DefaultStructuredMetadataModel) model.getFields().get(0).getMetaDataModel());
+    }
+
+    @Test
+    public void whenSchemaHasRefToDefinitionsByIdItShouldLoadTheTypes() throws Exception {
+        URL jsonSchemaResource = getClass().getClassLoader().getResource("jsonSchema/jsonSchemaWithInternalReferencesById.json");
+        
+        MetaDataModel metaDataModel = modelFactory.buildModel(jsonSchemaResource);
+        Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        DefaultStructuredMetadataModel model = (DefaultStructuredMetadataModel) metaDataModel;
+        
+        Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(1));
+        
+        Assert.assertThat(model.getFields().get(0).getName(), CoreMatchers.is("refById"));
+        Assert.assertThat(model.getFields().get(0).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
+        Assert.assertThat(model.getFields().get(0).getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        DefaultStructuredMetadataModel referencedModel = (DefaultStructuredMetadataModel) model.getFields().get(0).getMetaDataModel();
+        List<String> expectedFields = Arrays.asList("aantalDeelnemerschappen", //
+                "alternatieveCorrespondentie", //
+                "betaalwijze");
+        
+        Assert.assertThat(referencedModel.getFields(), IsCollectionWithSize.hasSize(expectedFields.size()));
+        for (String expectedField : expectedFields) {
+            Assert.assertThat("Expected field with name " + expectedField + " but got null", referencedModel.getFieldByName(expectedField), CoreMatchers.notNullValue());
+        }
     }
 
     @Test

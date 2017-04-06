@@ -9,18 +9,20 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-
 import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JSONPointerType implements JSONType
 {
 
+    private static final String DEFINITIONS = "definitions";
+    private static final String ID = "id";
     public static final String HASH = "#";
-    private java.lang.String ref;
+    private String ref;
     private SchemaEnv env;
 
-    public JSONPointerType(SchemaEnv env, java.lang.String reference)
+    public JSONPointerType(SchemaEnv env, String reference)
     {
         this.ref = reference;
         this.env = env;
@@ -28,23 +30,17 @@ public class JSONPointerType implements JSONType
 
     public JSONType resolve()
     {
-
-        if (HASH.equals(ref))
-        {
-            return env.lookupType(HASH);
-        }
-
         JSONType referenceType = null;
         String baseURI = "";
-        String jsonPointer = null;
+        String jsonPointer = HASH;
         if (ref.contains(HASH))
         {
-            String[] splitRef = ref.split("#");
+            String[] splitRef = ref.split(HASH);
             switch (splitRef.length)
             {
                 case 1:
                     baseURI = splitRef[0];
-                    jsonPointer = "#";
+                    jsonPointer = HASH;
                     break;
                 case 2:
                     baseURI = splitRef[0];
@@ -88,43 +84,75 @@ public class JSONPointerType implements JSONType
             }
         }
 
-        // See if it has already been resolved if base URI is empty or matches this schema's id
-        JSONObject contextJsonObject = environment.getContextJsonObject();
-        
-        if (baseURI.equals("") || (contextJsonObject.has("id") && baseURI.equals(contextJsonObject.get("id"))))
+        if (HASH.equals(jsonPointer))
         {
-            referenceType = environment.lookupType(jsonPointer);
+            referenceType = environment.lookupType(HASH);
+        } 
+        else 
+        {
+            // See if it has already been resolved if base URI is empty or matches this schema's id
+            JSONObject contextJsonObject = environment.getContextJsonObject();
+            if (baseURI.equals("") || (contextJsonObject.has(ID) && baseURI.equals(contextJsonObject.get(ID))))
+            {
+                referenceType = environment.lookupType(jsonPointer);
+            }
+            // If it has not, try to resolve it within the context document
+            if (referenceType == null)
+            {
+                JSONObject jsonObjectToken = findByPath(jsonPointer, contextJsonObject);
+                if (jsonObjectToken == null)
+                {
+                    boolean isNotJsonPath = jsonPointer.matches("[^/]+");
+                    if (isNotJsonPath && contextJsonObject.has(DEFINITIONS)) 
+                    {
+                        jsonObjectToken = findInDefinitionsById(contextJsonObject, jsonObjectToken);
+                    }
+                }
+                if (jsonObjectToken != null)
+                {
+                    referenceType = environment.evaluate(jsonObjectToken);
+                    environment.addType(jsonPointer, referenceType);
+                }
+            }
         }
-        // If it has not, try to resolve it within the context document
-        if (referenceType == null)
-        {
-            final String[] tokens = jsonPointer.split("/");
-            JSONObject jsonObjectToken = contextJsonObject;
+        return referenceType;
+    }
 
-            for (int i = 1; i < tokens.length; i++)
-            {
-                if (jsonObjectToken.has(tokens[i]))
-                {
-                    jsonObjectToken = (JSONObject) jsonObjectToken.get(tokens[i]);
-                }
-                else
-                {
-                    jsonObjectToken = null;
-                    break;
-                }
-            }
-            if (jsonObjectToken != null)
-            {
-                referenceType = environment.evaluate(jsonObjectToken);
-                environment.addType(jsonPointer, referenceType);
-                return referenceType;
-            }
-        }
-        else
+    private JSONObject findInDefinitionsById(JSONObject contextJsonObject, JSONObject jsonObjectToken) {
+        JSONObject definitions = contextJsonObject.getJSONObject(DEFINITIONS);
+        JSONArray names = definitions.names();
+        for (int nameIndex = 0; nameIndex < names.length(); nameIndex ++ )
         {
-            return referenceType;
+            String name = names.getString(nameIndex);
+            JSONObject definition = definitions.getJSONObject(name);
+            if (definition.has(ID) && definition.optString(ID).equals(ref)) 
+            {
+                jsonObjectToken = definition;
+                break;
+            }
         }
-        return null;
+        return jsonObjectToken;
+    }
+
+    private JSONObject findByPath(String jsonPointer, JSONObject contextJsonObject) {
+        JSONObject jsonObjectToken = contextJsonObject;
+        final String[] tokens = jsonPointer.split("/");
+
+        JSONObject result = null;
+        for (int i = 1; i < tokens.length; i++)
+        {
+            String token = tokens[i];
+            if (jsonObjectToken.has(token))
+            {
+                result = jsonObjectToken = (JSONObject) jsonObjectToken.get(token);
+            }
+            else
+            {
+                result = null;
+                break;
+            }
+        }
+        return result;
     }
 
     private SchemaEnv createSchemaEnv(SchemaEnv parentEnv, JSONObject remoteSchema) 
