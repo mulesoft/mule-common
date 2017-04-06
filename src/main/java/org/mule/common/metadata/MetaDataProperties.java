@@ -2,7 +2,12 @@ package org.mule.common.metadata;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 
 /**
  *
