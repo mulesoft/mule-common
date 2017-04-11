@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import org.apache.xmlbeans.impl.common.HttpRetriever;
+
 /**
  * <p>XML metadata representation</p>
  * <p>Shouldn't use this directly. Use {@link org.mule.common.metadata.builder.DefaultMetaDataBuilder} instead.</p>
@@ -45,6 +47,12 @@ public class DefaultXmlMetaDataModel extends AbstractStructuredMetaDataModel imp
     {
         this(new StringBasedSchemaProvider(schemas,encoding,null), rootElement,  new XmlMetaDataFieldFactory(new StringBasedSchemaProvider(schemas,encoding,null), rootElement, new XmlMetaDataNamespaceManager()), new XmlMetaDataNamespaceManager(), properties);
     }
+    
+    public DefaultXmlMetaDataModel(List<String> schemas, HttpRetriever retriever, QName rootElement, Charset encoding, MetaDataModelProperty... properties)
+    {
+        this(new MuleSchemaProvider(schemas,encoding,null, retriever), rootElement,  new XmlMetaDataFieldFactory(new MuleSchemaProvider(schemas,encoding,null, retriever), rootElement, new XmlMetaDataNamespaceManager()), new XmlMetaDataNamespaceManager(), properties);
+    }
+    
 
     /**
      * @param schemas     The schemas
