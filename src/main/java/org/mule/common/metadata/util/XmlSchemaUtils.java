@@ -14,6 +14,7 @@ import org.apache.xmlbeans.XmlBeans;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
+import org.apache.xmlbeans.impl.common.HttpRetriever;
 import org.apache.xmlbeans.impl.schema.SchemaTypeLoaderImpl;
 import org.apache.xmlbeans.impl.schema.SchemaTypeSystemCompiler;
 
@@ -24,7 +25,7 @@ public class XmlSchemaUtils {
         return getSchemaTypeSystem(schemas, null);
     }
 
-    public static SchemaTypeSystem getSchemaTypeSystem(List<String> schemas, URL source) throws XmlException {
+    public static SchemaTypeSystem getSchemaTypeSystem(List<String> schemas, URL source, HttpRetriever retriever) throws XmlException {
         final XmlOptions options = new XmlOptions();
         options.setCompileNoUpaRule();
         options.setCompileNoValidation();
@@ -47,7 +48,11 @@ public class XmlSchemaUtils {
         for (int i = 0; i < schemas.size(); i++) {
             schemaRepresentation[i] = contextTypeLoader.parse(schemas.get(i), null, options);
         }
-        return SchemaTypeSystemCompiler.compile(null, null, schemaRepresentation, null, contextTypeLoader, null, options);
+        return SchemaTypeSystemCompiler.compile(null, null, schemaRepresentation, null, contextTypeLoader, null, options, retriever);
+    }
+        
+    public static SchemaTypeSystem getSchemaTypeSystem(List<String> schemas, URL source) throws XmlException {
+        return getSchemaTypeSystem(schemas, source, null);
     }
 
 
