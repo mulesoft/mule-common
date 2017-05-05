@@ -1,0 +1,34 @@
+{
+  "id": "http://localhost:8000/schemas/v1.2/atm.json#",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "ATM",
+  "type": "object",
+  "properties": {
+    "ATMID": {
+      "description": "ATM terminal device identification for the acquirer and the issuer",
+      "$ref": "max_35_text.json"
+    },
+    "AccessibilityTypes": {
+      "description": "Information about the accessibility",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "accessibility_types_code.json"
+      }
+    },
+    "SupportedLanguages": {
+      "description": "Languages that the ATM supports",
+      "type": "array",
+      "items": {
+        "description": "must be ISO 693-2 codes",
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "ATMID",
+    "SupportedLanguages"
+  ],
+  "additionalProperties": false
+}

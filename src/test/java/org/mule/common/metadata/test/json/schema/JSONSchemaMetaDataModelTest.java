@@ -1,20 +1,32 @@
 package org.mule.common.metadata.test.json.schema;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.collection.IsCollectionWithSize;
 import org.json.JSONObject;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mule.common.metadata.*;
+import org.mule.common.metadata.DefaultListMetaDataModel;
+import org.mule.common.metadata.DefaultSimpleMetaDataModel;
+import org.mule.common.metadata.DefaultStructuredMetadataModel;
+import org.mule.common.metadata.DefaultUnknownMetaDataModel;
+import org.mule.common.metadata.JSONSchemaMetadataModelFactory;
+import org.mule.common.metadata.ListMetaDataModel;
+import org.mule.common.metadata.MetaDataModel;
+import org.mule.common.metadata.StructuredMetaDataModel;
+import org.mule.common.metadata.UnknownMetaDataModel;
 import org.mule.common.metadata.datatype.DataType;
-import org.mule.common.metadata.parser.json.*;
-
-import static org.junit.Assert.*;
-
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
+import org.mule.common.metadata.parser.json.JSONObjectType;
+import org.mule.common.metadata.parser.json.SchemaEnv;
+import org.mule.common.metadata.parser.json.SchemaException;
 
 public class JSONSchemaMetaDataModelTest {
 
@@ -556,6 +568,18 @@ public class JSONSchemaMetaDataModelTest {
 
         Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(1));
         Assert.assertThat(model.getFieldByName("myfield").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.INTEGER));
+    }
+    
+    @Test
+    public void testJsonWithRefToArray() throws Exception {
+        URL url = Paths.get("src/test/resources/jsonSchema/jsonSchemaWithRefToArray.json").toUri().toURL();
+        MetaDataModel metaDataModel = modelFactory.buildModel(url);
+        Assert.assertNotNull(metaDataModel);
+        Assert.assertThat(metaDataModel.getDataType(), CoreMatchers.is(DataType.JSON));
+
+        Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(StructuredMetaDataModel.class));
+        StructuredMetaDataModel model = (StructuredMetaDataModel) metaDataModel;
+        Assert.assertEquals(model.getFields().get(1).getMetaDataModel().getDataType(), DataType.LIST);
     }
 
     @Test

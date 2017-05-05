@@ -1,0 +1,7 @@
+{
+  "id": "http://localhost:8000/schemas/v1.2/definitions/common/max_35_text.json#",
+  "description": "maxLength 35 text",
+  "type": "string",
+  "minLength": 1,
+  "maxLength": 35
+}
