@@ -1,0 +1,17 @@
+{
+  "id": "http://localhost:8000/schemas/v1.2/definitions/common/accessibility_types_code.json#",
+  "description": "Information about the accessibility",
+  "type": "string",
+  "enum": [
+    "AudioCashMachine",
+    "AutomaticDoors",
+    "ChairAccess",
+    "DriveThru",
+    "ExternalRamp",
+    "InductionLoop",
+    "InternalRamp",
+    "LevelAccess",
+    "LowerLevelCounter",
+    "WheelchairAccess"
+  ]
+}

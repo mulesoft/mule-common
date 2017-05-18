@@ -63,7 +63,7 @@ public class JSONPointerType implements JSONType
             {
                 url = new URL(baseURI);
                 remoteSchema = getRemoteSchema(url);
-                environment = createSchemaEnv(env, remoteSchema);
+                environment = createSchemaEnv(env, remoteSchema, url);
             }
             catch (MalformedURLException e)
             {
@@ -74,7 +74,7 @@ public class JSONPointerType implements JSONType
                 {
                     urlFile = new URL(contextJsonURL, baseURI);
                     remoteSchema = getRemoteSchema(urlFile);
-                    environment = createSchemaEnv(env, remoteSchema);
+                    environment = createSchemaEnv(env, remoteSchema, urlFile);
                 }
                 catch (MalformedURLException e1)
                 {
@@ -155,9 +155,9 @@ public class JSONPointerType implements JSONType
         return result;
     }
 
-    private SchemaEnv createSchemaEnv(SchemaEnv parentEnv, JSONObject remoteSchema) 
+    private SchemaEnv createSchemaEnv(SchemaEnv parentEnv, JSONObject remoteSchema, URL contextUrl)
     {
-        SchemaEnv environment = new SchemaEnv(parentEnv, remoteSchema);
+        SchemaEnv environment = new SchemaEnv(parentEnv, remoteSchema, contextUrl);
         // register root type in new env
         JSONType rootType = environment.evaluate(remoteSchema);
         environment.addType(HASH, rootType);

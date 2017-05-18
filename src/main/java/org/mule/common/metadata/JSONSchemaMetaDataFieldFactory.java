@@ -3,7 +3,6 @@ package org.mule.common.metadata;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.lang.String;
 import java.util.Map;
 
 import org.mule.common.metadata.datatype.DataType;
@@ -77,22 +76,40 @@ public class JSONSchemaMetaDataFieldFactory implements MetaDataFieldFactory {
     }
 
     private void processJSONSchemaArray(JSONArrayType property, String name, List<MetaDataField> metadata){
-        JSONType itemsType = property.getItemsType();
+        AbstractMetaDataModel model = buildJSONArrayMetaDataModel(property);
+        metadata.add(new DefaultMetaDataField(name, new DefaultListMetaDataModel(model)));
 
+    }
+
+    private AbstractMetaDataModel buildJSONArrayMetaDataModel(JSONArrayType property) {
+        AbstractMetaDataModel model = null;
+        JSONType itemsType = property.getItemsType();
         if (itemsType.isJSONPrimitive()) { // Case List<String>
             DataType dataType = getDataType(itemsType);
-            MetaDataModel model = dataType==DataType.UNKNOWN ? new DefaultUnknownMetaDataModel(): new DefaultSimpleMetaDataModel(dataType);
-            metadata.add(new DefaultMetaDataField(name, new DefaultListMetaDataModel(model)));
-        }else {
-            DefaultStructuredMetadataModel model = null;
+            model = dataType == DataType.UNKNOWN ? new DefaultUnknownMetaDataModel() : new DefaultSimpleMetaDataModel(dataType);
+        } else {
             if(itemsType.isJSONPointer()){
-                 model = buildJSONMetaDataModel((JSONObjectType) ((JSONPointerType) itemsType).resolve());
+                model = buildJSONPointerMetaDataModel((JSONPointerType) itemsType);
             }else if (itemsType.isJSONObject()){
-                 model = buildJSONMetaDataModel((JSONObjectType) itemsType);
+                model = buildJSONMetaDataModel((JSONObjectType) itemsType);
             }
-            metadata.add(new DefaultMetaDataField(name, new DefaultListMetaDataModel(model)));
         }
+        return model;
+    }
 
+    private AbstractMetaDataModel buildJSONPointerMetaDataModel(JSONPointerType pointer) {
+        JSONType resolvedType = pointer.resolve();
+        if (resolvedType.isJSONArray()) {
+            return buildJSONArrayMetaDataModel((JSONArrayType) resolvedType);
+        } else if (resolvedType.isJSONObject()) {
+            return buildJSONMetaDataModel((JSONObjectType) resolvedType);
+        } else if (resolvedType.isJSONPointer()) {
+            return buildJSONPointerMetaDataModel((JSONPointerType) resolvedType);
+        } else if (resolvedType.isJSONPrimitive()) {
+            DataType dataType = getDataType(resolvedType);
+            return dataType == DataType.UNKNOWN ? new DefaultUnknownMetaDataModel() : new DefaultSimpleMetaDataModel(dataType);
+        }
+        return null;
     }
 
     private void processJSONSchemaPrimitive(JSONType property, String name, List<MetaDataField> metadata) {
