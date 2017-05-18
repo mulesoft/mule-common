@@ -47,7 +47,12 @@ public class SchemaEnv
 
     public SchemaEnv(JSONObject contextJsonObject, URL contextJsonURL)
     {
-        this(null, contextJsonObject);
+        this(null, contextJsonObject, contextJsonURL);
+    }
+
+    public SchemaEnv(SchemaEnv p, JSONObject contextJsonObject, URL contextJsonURL) 
+    {
+        this(p, contextJsonObject);
         this.contextJsonURL = contextJsonURL;
     }
 
@@ -127,7 +132,7 @@ public class SchemaEnv
                         String type = json.getString(JSONSchemaConstants.TYPE).toLowerCase();
                         if (type.equals(JSONSchemaConstants.ARRAY))
                         {
-                            specifiedType = new JSONArrayType(new SchemaEnv(this, contextJsonObject), json);
+                            specifiedType = new JSONArrayType(new SchemaEnv(this, contextJsonObject, contextJsonURL), json);
                         }
                         else if (type.equals(JSONSchemaConstants.OBJECT))
                         {
@@ -139,7 +144,7 @@ public class SchemaEnv
                             // because JSONObjectType will bind itself into the Schema, and we don't
                             // want those names to be globally visible -- only local visible to the
                             // schema's sub-expressions.
-                            specifiedType = new JSONObjectType(new SchemaEnv(this, contextJsonObject), json);
+                            specifiedType = new JSONObjectType(new SchemaEnv(this, contextJsonObject, contextJsonURL), json);
                         }
                         else
                         {//If the type is a string but not an array nor object
@@ -154,7 +159,7 @@ public class SchemaEnv
                 }
                 else if (json.has(JSONSchemaConstants.PROPERTIES))
                 {
-                    specifiedType = new JSONObjectType(new SchemaEnv(this, contextJsonObject), json);
+                    specifiedType = new JSONObjectType(new SchemaEnv(this, contextJsonObject, contextJsonURL), json);
                 }
                 else if (json.has(JSONSchemaConstants.ENUM))
                 {
