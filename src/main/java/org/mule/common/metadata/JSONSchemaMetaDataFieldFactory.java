@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.mule.common.metadata.datatype.DataType;
-import org.mule.common.metadata.parser.json.JSONArrayType;
-import org.mule.common.metadata.parser.json.JSONObjectType;
-import org.mule.common.metadata.parser.json.JSONPointerType;
-import org.mule.common.metadata.parser.json.JSONType;
-import org.mule.common.metadata.parser.json.JSONTypeUtils;
+import org.mule.common.metadata.parser.json.*;
 
 /**
  * Created by studio on 18/07/2014.
