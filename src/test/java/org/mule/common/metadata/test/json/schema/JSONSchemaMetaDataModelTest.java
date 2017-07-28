@@ -579,7 +579,7 @@ public class JSONSchemaMetaDataModelTest {
 
         Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(StructuredMetaDataModel.class));
         StructuredMetaDataModel model = (StructuredMetaDataModel) metaDataModel;
-        Assert.assertEquals(model.getFieldByName("AccessibilityTypes").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.LIST));
+        Assert.assertThat(model.getFieldByName("AccessibilityTypes").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.LIST));
     }
 
     @Test
