@@ -5,6 +5,7 @@ target/
 .idea
 .DS_Store
 *.iml
+*.log
 lib/
 src/main/java/org/mule/common/query/dsql/*.tokens
 src/main/java/org/mule/common/query/dsql/grammar/*Lexer.java
