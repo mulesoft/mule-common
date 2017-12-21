@@ -11,11 +11,11 @@ import org.mule.common.metadata.parser.json.*;
  */
 public class JSONSchemaMetaDataFieldFactory implements MetaDataFieldFactory {
 
-    private final JSONSchemaMetadataModelFactory.JSONMetadataModelFactoryHelper helper;
+    private final JSONMetadataModelFactoryHelper helper;
 
     private JSONType jsonSchemaType;
 
-    public JSONSchemaMetaDataFieldFactory(JSONObjectType type, JSONSchemaMetadataModelFactory.JSONMetadataModelFactoryHelper helper) {
+    public JSONSchemaMetaDataFieldFactory(JSONObjectType type, JSONMetadataModelFactoryHelper helper) {
         jsonSchemaType = type;
         this.helper = helper;
     }
