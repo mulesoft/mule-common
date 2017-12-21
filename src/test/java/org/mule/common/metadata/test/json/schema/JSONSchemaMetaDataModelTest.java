@@ -552,7 +552,6 @@ public class JSONSchemaMetaDataModelTest {
         Assert.assertThat(model.getElementModel().getDataType(), CoreMatchers.is(DataType.UNKNOWN));
     }
 
-    @Ignore("JSON metadata factory doesn't support $refs at root level")
     @Test
     public void testJsonWithRefAndNoType() throws Exception {
         InputStream jsonSchemaStream = getClass().getClassLoader().getResourceAsStream("jsonSchema/refNoType.json");
