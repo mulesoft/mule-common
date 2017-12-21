@@ -20,9 +20,11 @@ public class JSONSchemaMetadataModelFactory
     public static final String TYPE = "type";
     public static final String PROPERTIES = "properties";
 
+    private final JSONMetadataModelFactoryHelper helper;
+
     public JSONSchemaMetadataModelFactory()
     {
-
+        this.helper = new JSONMetadataModelFactoryHelper();
     }
 
     private MetaDataModel buildModel(String jsonSchemaString, URL jsonSchemaURL)
@@ -37,7 +39,7 @@ public class JSONSchemaMetadataModelFactory
                 final JSONType itemsType = arrayType.getItemsType();
                 if (itemsType.isJSONObject())
                 {
-                    final DefaultStructuredMetadataModel model = new DefaultStructuredMetadataModel(DataType.JSON, new JSONSchemaMetaDataFieldFactory((JSONObjectType) itemsType));
+                    final DefaultStructuredMetadataModel model = new DefaultStructuredMetadataModel(DataType.JSON, new JSONSchemaMetaDataFieldFactory((JSONObjectType) itemsType, helper));
                     return new DefaultListMetaDataModel(model);
                 }
                 else if (itemsType.isJSONPrimitive())
@@ -53,9 +55,14 @@ public class JSONSchemaMetadataModelFactory
                 }
 
             }
+            else if (new SchemaEnv().evaluate(jsonSchemaObject).isJSONPointer())
+            {
+                final JSONPointerType pointer = (JSONPointerType) new SchemaEnv(null, jsonSchemaObject).evaluate(jsonSchemaObject);
+                return helper.buildJSONPointerMetaDataModel(pointer);
+            }
             else if ((jsonSchemaObject.has(TYPE) && jsonSchemaObject.get(TYPE).toString().toLowerCase().equals(OBJECT_ELEMENT_NAME)) || jsonSchemaObject.has(PROPERTIES))
             {
-                final JSONSchemaMetaDataFieldFactory fieldFactory = new JSONSchemaMetaDataFieldFactory(new JSONObjectType(new SchemaEnv(jsonSchemaObject, jsonSchemaURL), jsonSchemaObject));
+                final JSONSchemaMetaDataFieldFactory fieldFactory = new JSONSchemaMetaDataFieldFactory(new JSONObjectType(new SchemaEnv(jsonSchemaObject, jsonSchemaURL), jsonSchemaObject), helper);
                 return new DefaultStructuredMetadataModel(DataType.JSON, fieldFactory);
             }
             else if (new SchemaEnv().evaluate(jsonSchemaObject).isJSONPrimitive())
@@ -87,4 +94,5 @@ public class JSONSchemaMetadataModelFactory
         String jsonSchemaString = IOUtils.toString(url.openStream());
         return buildModel(jsonSchemaString, url);
     }
+
 }

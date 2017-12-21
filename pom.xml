@@ -292,6 +292,15 @@
         </pluginManagement>
     </build>
 
+    <repositories>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>Nexus Repository</name>
+			<layout>default</layout>
+			<url>http://repository-master.mulesoft.org/nexus/content/repositories/releases/</url>
+		</repository>
+    </repositories>
+
     <distributionManagement>
         <repository>
             <id>mule-releases</id>
