@@ -55,7 +55,7 @@ public class JSONSchemaMetadataModelFactory
                 }
 
             }
-            else if (new SchemaEnv().evaluate(jsonSchemaObject).isJSONPointer())
+            else if (new SchemaEnv(null, jsonSchemaObject).evaluate(jsonSchemaObject).isJSONPointer())
             {
                 final JSONPointerType pointer = (JSONPointerType) new SchemaEnv(null, jsonSchemaObject).evaluate(jsonSchemaObject);
                 return helper.buildJSONPointerMetaDataModel(pointer);

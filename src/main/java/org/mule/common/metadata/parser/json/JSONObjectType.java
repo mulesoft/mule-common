@@ -1,8 +1,12 @@
 package org.mule.common.metadata.parser.json;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +17,6 @@ import org.json.JSONObject;
  */
 public class JSONObjectType extends AbstractType { 
 
-	private SchemaEnv env;
 	private java.lang.String id;
 	private java.lang.String name;
 	private java.lang.String description;
@@ -22,8 +25,6 @@ public class JSONObjectType extends AbstractType {
     
 	@SuppressWarnings("unchecked")
     public JSONObjectType(SchemaEnv env, JSONObject obj) throws SchemaException { 
-		
-	    this.env = env;
 		this.name = null;
 		this.description = null;
 		isStrict = false;
@@ -52,7 +53,6 @@ public class JSONObjectType extends AbstractType {
 		            }
 		        }
 		    }
-			
 			if(obj.has("strict")) { 
 				isStrict = obj.getBoolean("strict");
 			}
@@ -73,7 +73,19 @@ public class JSONObjectType extends AbstractType {
                 env.addType(id, this);
 			}
 			
-			if(obj.has(JSONSchemaConstants.PROPERTIES)) {
+			// an object could either have a $ref or properties, if both are defined, $ref takes precedence
+			if (obj.has(JSONSchemaConstants.$_REF)) {
+			    String reference = obj.getString(JSONSchemaConstants.$_REF);
+			    JSONType resolvedReference = new JSONPointerType(env, reference).resolve();
+			    if (resolvedReference instanceof JSONObjectType) {
+			        JSONObjectType jsonObjectType = (JSONObjectType) resolvedReference;
+			        String[] jsonObjectProperties = jsonObjectType.getProperties();
+			        for (String property : jsonObjectProperties) {
+			            JSONType propertyType = jsonObjectType.getPropertyType(property);
+			            properties.put(property, propertyType);
+			        }
+			    }
+			} else if (obj.has(JSONSchemaConstants.PROPERTIES)) {
 				JSONObject propObj = obj.getJSONObject(JSONSchemaConstants.PROPERTIES);
 				Iterator<java.lang.String> itr = (Iterator<java.lang.String>)propObj.keys();
 				while(itr.hasNext()) { 
@@ -83,18 +95,8 @@ public class JSONObjectType extends AbstractType {
                     properties.put(propName, propType);                  
 				}
 			}			
-		} catch(JSONException e) { 
+		} catch (JSONException e) { 
 			throw new SchemaException(obj.toString(), e);
-		}
-	}
-	
-
-    public void putInEnv(SchemaEnv newEnv) { 
-		if(name != null) { 
-			newEnv.addType(name, this);
-			this.env = newEnv; 
-		} else { 
-			throw new IllegalArgumentException("Cannot add a blank type to a SchemaEnv");
 		}
 	}
 	
