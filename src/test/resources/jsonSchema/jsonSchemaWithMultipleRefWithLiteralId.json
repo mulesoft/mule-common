@@ -1,0 +1,29 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:ha:generated:classes:ACSFlightSeatMapRSACS",
+  "properties" : {
+    "errorSource" : {
+      "type" : "object",
+      "id" : "urn:jsonschema:com:ha:generated:classes:SystemNameAndId",
+      "properties" : {
+        "value" : {
+          "type" : "string"
+        },
+        "id" : {
+          "type" : "string"
+        }
+      }
+    },
+    "system" : {
+      "type" : "object",
+      "$ref" : "urn:intermediate"
+    }
+  },
+  "definitions" : {
+    "intermediate" : {
+    	"type" : "object",
+    	"id" : "urn:intermediate",
+    	"$ref" : "urn:jsonschema:com:ha:generated:classes:SystemNameAndId"
+    }
+  }
+}
