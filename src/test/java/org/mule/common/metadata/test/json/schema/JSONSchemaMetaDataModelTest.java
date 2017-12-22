@@ -636,6 +636,44 @@ public class JSONSchemaMetaDataModelTest {
     }
 
     @Test
+    public void testJsonArrayWithItemsRef() throws Exception {
+        InputStream jsonSchemaStream = getClass().getClassLoader().getResourceAsStream("jsonSchema/jsonSchemaArrayWithItemsRef.json");
+        String jsonSchemaString = convertStreamToString(jsonSchemaStream);
+
+        MetaDataModel metaDataModel = modelFactory.buildModel(jsonSchemaString);
+        Assert.assertNotNull(metaDataModel);
+
+        Assert.assertThat(metaDataModel.getDataType(), CoreMatchers.is(DataType.LIST));
+
+        Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(ListMetaDataModel.class));
+        ListMetaDataModel model = (ListMetaDataModel) metaDataModel;
+
+        MetaDataModel elementModel = model.getElementModel();
+        Assert.assertThat(elementModel.getDataType(), CoreMatchers.is(DataType.JSON));
+
+        Assert.assertThat(elementModel, CoreMatchers.instanceOf(StructuredMetaDataModel.class));
+        StructuredMetaDataModel orderModel = (StructuredMetaDataModel) elementModel;
+
+        Assert.assertThat(orderModel.getFields(), IsCollectionWithSize.hasSize(2));
+        Assert.assertThat(orderModel.getFieldByName("order_id").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.STRING));
+
+        MetaDataField itemsField = orderModel.getFieldByName("items");
+        Assert.assertNotNull(itemsField);
+
+        MetaDataModel itemsModel = itemsField.getMetaDataModel();
+        Assert.assertThat(itemsModel, CoreMatchers.instanceOf(ListMetaDataModel.class));
+
+        MetaDataModel itemModel = ((ListMetaDataModel) itemsModel).getElementModel();
+        Assert.assertThat(itemModel, CoreMatchers.instanceOf(StructuredMetaDataModel.class));
+
+        StructuredMetaDataModel productItemModel = (StructuredMetaDataModel) itemModel;
+
+        Assert.assertThat(productItemModel.getFields(), IsCollectionWithSize.hasSize(2));
+        Assert.assertThat(productItemModel.getFieldByName("product_id").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.STRING));
+        Assert.assertThat(productItemModel.getFieldByName("quantity").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.INTEGER));
+    }
+
+    @Test
     public void testJsonWithRefToArray() throws Exception {
         URL url = Paths.get("src/test/resources/jsonSchema/jsonSchemaWithRefToArray.json").toUri().toURL();
         MetaDataModel metaDataModel = modelFactory.buildModel(url);
