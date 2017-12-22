@@ -42,6 +42,11 @@ public class JSONSchemaMetadataModelFactory
                     final DefaultStructuredMetadataModel model = new DefaultStructuredMetadataModel(DataType.JSON, new JSONSchemaMetaDataFieldFactory((JSONObjectType) itemsType, helper));
                     return new DefaultListMetaDataModel(model);
                 }
+                else if (itemsType.isJSONPointer())
+                {
+                    final MetaDataModel model = helper.buildJSONPointerMetaDataModel((JSONPointerType) itemsType);
+                    return new DefaultListMetaDataModel(model);
+                }
                 else if (itemsType.isJSONPrimitive())
                 {
                     final DataType dataType = JSONTypeUtils.getDataType(itemsType);
