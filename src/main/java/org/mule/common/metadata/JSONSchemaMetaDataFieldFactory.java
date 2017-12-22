@@ -2,6 +2,7 @@ package org.mule.common.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.mule.common.metadata.datatype.DataType;
 import org.mule.common.metadata.parser.json.*;
@@ -14,6 +15,14 @@ public class JSONSchemaMetaDataFieldFactory implements MetaDataFieldFactory {
     private final JSONMetadataModelFactoryHelper helper;
 
     private JSONType jsonSchemaType;
+
+    public JSONSchemaMetaDataFieldFactory(JSONObjectType type) {
+        this(type, new JSONMetadataModelFactoryHelper());
+    }
+
+    public JSONSchemaMetaDataFieldFactory(JSONObjectType type, Map<JSONObjectType, DefaultStructuredMetadataModel> visitedTypes) {
+        this(type, new JSONMetadataModelFactoryHelper(visitedTypes));
+    }
 
     public JSONSchemaMetaDataFieldFactory(JSONObjectType type, JSONMetadataModelFactoryHelper helper) {
         jsonSchemaType = type;

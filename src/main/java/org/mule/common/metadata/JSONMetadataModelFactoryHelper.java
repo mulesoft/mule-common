@@ -12,7 +12,15 @@ import java.util.Map;
 
 class JSONMetadataModelFactoryHelper {
 
-    private final Map<JSONObjectType, DefaultStructuredMetadataModel> visitedTypes = new HashMap<>();
+    private final Map<JSONObjectType, DefaultStructuredMetadataModel> visitedTypes;
+
+    public JSONMetadataModelFactoryHelper(final Map<JSONObjectType, DefaultStructuredMetadataModel> visitedTypes) {
+        this.visitedTypes = visitedTypes;
+    }
+
+    public JSONMetadataModelFactoryHelper() {
+        this(new HashMap<JSONObjectType, DefaultStructuredMetadataModel>());
+    }
 
     public AbstractMetaDataModel buildJSONArrayMetaDataModel(JSONArrayType property) {
         AbstractMetaDataModel model = null;
