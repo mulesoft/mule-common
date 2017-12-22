@@ -8,15 +8,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Iterator;
 
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JSONPointerType implements JSONType
 {
-
-    private static final String DEFINITIONS = "definitions";
     private static final String ID = "id";
     public static final String HASH = "#";
     private String ref;
@@ -33,105 +31,113 @@ public class JSONPointerType implements JSONType
         JSONType referenceType = null;
         String baseURI = "";
         String jsonPointer = HASH;
-        if (ref.contains(HASH))
+        String[] splitRef = ref.split(HASH);
+
+        // first try to look if in the context of this ref exists any object with an id that matches equally to this ref. It doesn't matter if the id is actually a URL to a json
+        // schema, if another object has the same id, the ref should resolve to that object
+        JSONObject literalRef = findAnyObjectWithId(env.getContextJsonObject(), ref);
+        if (literalRef != null)
         {
-            String[] splitRef = ref.split(HASH);
-            switch (splitRef.length)
-            {
-                case 1:
-                    baseURI = splitRef[0];
-                    jsonPointer = HASH;
-                    break;
-                case 2:
-                    baseURI = splitRef[0];
-                    jsonPointer = splitRef[1];
-                    break;
-            }
+            referenceType = env.evaluate(literalRef);
+            env.addType(ref, referenceType);
         }
         else
         {
-            baseURI = ref;
-            jsonPointer = HASH;
-        }
-
-        SchemaEnv environment = env;
-        if (!baseURI.isEmpty())
-        {
-            JSONObject remoteSchema;
-            URL url;
-            try
+            switch (splitRef.length)
             {
-                url = new URL(baseURI);
-                remoteSchema = getRemoteSchema(url);
-                environment = createSchemaEnv(env, remoteSchema, url);
+            case 1:
+                baseURI = splitRef[0];
+                jsonPointer = HASH;
+                break;
+            case 2:
+                baseURI = splitRef[0];
+                jsonPointer = splitRef[1];
+                break;
             }
-            catch (MalformedURLException e)
+
+            SchemaEnv environment = env;
+            if (!baseURI.isEmpty())
             {
-                //Try to get schema from a file in relative path
-                URL contextJsonURL = env.getContextJsonURL();
-                URL urlFile;
+                JSONObject remoteSchema;
+                URL url;
                 try
                 {
-                    urlFile = new URL(contextJsonURL, baseURI);
-                    remoteSchema = getRemoteSchema(urlFile);
-                    environment = createSchemaEnv(env, remoteSchema, urlFile);
+                    url = new URL(baseURI);
+                    remoteSchema = getRemoteSchema(url);
+                    environment = createSchemaEnv(env, remoteSchema, url);
                 }
-                catch (MalformedURLException e1)
+                catch (MalformedURLException e)
                 {
-                    throw new SchemaException(e1);
-                }
-
-            }
-        }
-
-        if (HASH.equals(jsonPointer))
-        {
-            referenceType = environment.lookupType(HASH);
-        } 
-        else 
-        {
-            // See if it has already been resolved if base URI is empty or matches this schema's id
-            JSONObject contextJsonObject = environment.getContextJsonObject();
-            if (baseURI.equals("") || (contextJsonObject.has(ID) && baseURI.equals(contextJsonObject.get(ID))))
-            {
-                referenceType = environment.lookupType(jsonPointer);
-            }
-            // If it has not, try to resolve it within the context document
-            if (referenceType == null)
-            {
-                JSONObject jsonObjectToken = findByPath(jsonPointer, contextJsonObject);
-                if (jsonObjectToken == null)
-                {
-                    boolean isNotJsonPath = jsonPointer.matches("[^/]+");
-                    if (isNotJsonPath && contextJsonObject.has(DEFINITIONS)) 
+                    // Try to get schema from a file in relative path
+                    URL contextJsonURL = env.getContextJsonURL();
+                    URL urlFile;
+                    try
                     {
-                        jsonObjectToken = findInDefinitionsById(contextJsonObject, jsonObjectToken);
+                        urlFile = new URL(contextJsonURL, baseURI);
+                        remoteSchema = getRemoteSchema(urlFile);
+                        environment = createSchemaEnv(env, remoteSchema, urlFile);
                     }
+                    catch (MalformedURLException e1)
+                    {
+                        throw new SchemaException(e1);
+                    }
+
                 }
-                if (jsonObjectToken != null)
+            }
+
+            if (HASH.equals(jsonPointer))
+            {
+                referenceType = environment.lookupType(HASH);
+            }
+            else
+            {
+                // See if it has already been resolved if base URI is empty or matches this schema's id
+                JSONObject contextJsonObject = environment.getContextJsonObject();
+                if (baseURI.equals("") || (contextJsonObject.has(ID) && baseURI.equals(contextJsonObject.get(ID))))
                 {
-                    referenceType = environment.evaluate(jsonObjectToken);
-                    environment.addType(jsonPointer, referenceType);
+                    referenceType = environment.lookupType(jsonPointer);
+                }
+                // If it has not, try to resolve it within the context document
+                if (referenceType == null)
+                {
+                    JSONObject jsonObjectToken = findByPath(jsonPointer, contextJsonObject);
+                    if (jsonObjectToken != null)
+                    {
+                        referenceType = environment.evaluate(jsonObjectToken);
+                        environment.addType(jsonPointer, referenceType);
+                    }
                 }
             }
         }
         return referenceType;
     }
 
-    private JSONObject findInDefinitionsById(JSONObject contextJsonObject, JSONObject jsonObjectToken) {
-        JSONObject definitions = contextJsonObject.getJSONObject(DEFINITIONS);
-        JSONArray names = definitions.names();
-        for (int nameIndex = 0; nameIndex < names.length(); nameIndex ++ )
+    private JSONObject findAnyObjectWithId(JSONObject contextJsonObject, String id)
+    {
+        JSONObject result = null;
+        if (contextJsonObject.has(ID) && contextJsonObject.get(ID).equals(id))
         {
-            String name = names.getString(nameIndex);
-            JSONObject definition = definitions.getJSONObject(name);
-            if (definition.has(ID) && definition.optString(ID).equals(ref)) 
+            result = contextJsonObject;
+        }
+        else
+        {
+            Iterator<?> keys = contextJsonObject.keys();
+            while (keys.hasNext() && result == null)
             {
-                jsonObjectToken = definition;
-                break;
+                Object next = keys.next();
+                if (next instanceof String)
+                {
+                    String nextKey = (String) next;
+                    Object nextValue = contextJsonObject.get(nextKey);
+                    if (nextValue instanceof JSONObject)
+                    {
+                        JSONObject jsonObject = (JSONObject) nextValue;
+                        result = findAnyObjectWithId(jsonObject, id);
+                    }
+                }
             }
         }
-        return jsonObjectToken;
+        return result;
     }
 
     private JSONObject findByPath(String jsonPointer, JSONObject contextJsonObject) {

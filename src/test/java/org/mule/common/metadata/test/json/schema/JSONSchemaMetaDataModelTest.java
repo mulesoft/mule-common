@@ -1,5 +1,8 @@
 package org.mule.common.metadata.test.json.schema;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.is;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -20,6 +23,7 @@ import org.mule.common.metadata.DefaultStructuredMetadataModel;
 import org.mule.common.metadata.DefaultUnknownMetaDataModel;
 import org.mule.common.metadata.JSONSchemaMetadataModelFactory;
 import org.mule.common.metadata.ListMetaDataModel;
+import org.mule.common.metadata.MetaDataField;
 import org.mule.common.metadata.MetaDataModel;
 import org.mule.common.metadata.StructuredMetaDataModel;
 import org.mule.common.metadata.UnknownMetaDataModel;
@@ -27,6 +31,7 @@ import org.mule.common.metadata.datatype.DataType;
 import org.mule.common.metadata.parser.json.JSONObjectType;
 import org.mule.common.metadata.parser.json.SchemaEnv;
 import org.mule.common.metadata.parser.json.SchemaException;
+import org.mule.common.metadata.property.DescriptionMetaDataProperty;
 
 public class JSONSchemaMetaDataModelTest {
 
@@ -67,8 +72,9 @@ public class JSONSchemaMetaDataModelTest {
                 CoreMatchers.is(DataType.STRING));
 
         // Test hints field's fields
-        Assert.assertThat(((DefaultStructuredMetadataModel) ((DefaultStructuredMetadataModel) model.getFields().get(0).getMetaDataModel()).getFields().get(0).getMetaDataModel())
-                .getFields(), IsCollectionWithSize.hasSize(11));
+        Assert.assertThat(
+                ((DefaultStructuredMetadataModel) ((DefaultStructuredMetadataModel) model.getFields().get(0).getMetaDataModel()).getFields().get(0).getMetaDataModel()).getFields(),
+                IsCollectionWithSize.hasSize(11));
 
     }
 
@@ -162,15 +168,75 @@ public class JSONSchemaMetaDataModelTest {
     }
 
     @Test
-    public void whenSchemaHasRefToDefinitionsByIdItShouldLoadTheTypes() throws Exception {
-        URL jsonSchemaResource = getClass().getClassLoader().getResource("jsonSchema/jsonSchemaWithInternalReferencesById.json");
+    public void whenSchemaHasRefWithLiteralIdItShouldLoadTheTypes() throws Exception {
+        URL jsonSchemaResource = getClass().getClassLoader().getResource("jsonSchema/jsonSchemaWithRefWithLiteralId.json");
+
+        MetaDataModel metaDataModel = modelFactory.buildModel(jsonSchemaResource);
+        Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        DefaultStructuredMetadataModel model = (DefaultStructuredMetadataModel) metaDataModel;
+
+        Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(2));
+
+        MetaDataField errorSourceField = model.getFields().get(0);
+        MetaDataField systemField = model.getFields().get(1);
+        Assert.assertThat(errorSourceField.getName(), CoreMatchers.is("errorSource"));
+        Assert.assertThat(systemField.getName(), CoreMatchers.is("system"));
+        Assert.assertThat(errorSourceField.getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
+        Assert.assertThat(errorSourceField.getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        Assert.assertThat(systemField.getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
+        Assert.assertThat(systemField.getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        
+        DefaultStructuredMetadataModel structuredErrorSourceField = (DefaultStructuredMetadataModel) errorSourceField.getMetaDataModel();
+        DefaultStructuredMetadataModel structuredSystemField = (DefaultStructuredMetadataModel) systemField.getMetaDataModel();
+
+        Assert.assertThat(structuredErrorSourceField.getFields(), IsCollectionWithSize.hasSize(2));
+        Assert.assertThat(structuredErrorSourceField.getFieldByName("id"), notNullValue());
+        Assert.assertThat(structuredErrorSourceField.getFieldByName("value"), notNullValue());
+        Assert.assertThat(structuredSystemField.getFields(), IsCollectionWithSize.hasSize(2));
+        Assert.assertThat(structuredSystemField.getFieldByName("id"), notNullValue());
+        Assert.assertThat(structuredSystemField.getFieldByName("value"), notNullValue());
+    }
+
+    @Test
+    public void whenSchemaHasMultipleRefWithLiteralIdItShouldLoadTheTypes() throws Exception {
+        URL jsonSchemaResource = getClass().getClassLoader().getResource("jsonSchema/jsonSchemaWithMultipleRefWithLiteralId.json");
         
         MetaDataModel metaDataModel = modelFactory.buildModel(jsonSchemaResource);
         Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
         DefaultStructuredMetadataModel model = (DefaultStructuredMetadataModel) metaDataModel;
         
-        Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(1));
+        Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(2));
         
+        MetaDataField errorSourceField = model.getFields().get(0);
+        MetaDataField systemField = model.getFields().get(1);
+        Assert.assertThat(errorSourceField.getName(), CoreMatchers.is("errorSource"));
+        Assert.assertThat(systemField.getName(), CoreMatchers.is("system"));
+        Assert.assertThat(errorSourceField.getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
+        Assert.assertThat(errorSourceField.getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        Assert.assertThat(systemField.getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
+        Assert.assertThat(systemField.getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        
+        DefaultStructuredMetadataModel structuredErrorSourceField = (DefaultStructuredMetadataModel) errorSourceField.getMetaDataModel();
+        DefaultStructuredMetadataModel structuredSystemField = (DefaultStructuredMetadataModel) systemField.getMetaDataModel();
+        
+        Assert.assertThat(structuredErrorSourceField.getFields(), IsCollectionWithSize.hasSize(2));
+        Assert.assertThat(structuredErrorSourceField.getFieldByName("id"), notNullValue());
+        Assert.assertThat(structuredErrorSourceField.getFieldByName("value"), notNullValue());
+        Assert.assertThat(structuredSystemField.getFields(), IsCollectionWithSize.hasSize(2));
+        Assert.assertThat(structuredSystemField.getFieldByName("id"), notNullValue());
+        Assert.assertThat(structuredSystemField.getFieldByName("value"), notNullValue());
+    }
+
+    @Test
+    public void whenSchemaHasRefToDefinitionsByIdItShouldLoadTheTypes() throws Exception {
+        URL jsonSchemaResource = getClass().getClassLoader().getResource("jsonSchema/jsonSchemaWithInternalReferencesById.json");
+
+        MetaDataModel metaDataModel = modelFactory.buildModel(jsonSchemaResource);
+        Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
+        DefaultStructuredMetadataModel model = (DefaultStructuredMetadataModel) metaDataModel;
+
+        Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(1));
+
         Assert.assertThat(model.getFields().get(0).getName(), CoreMatchers.is("refById"));
         Assert.assertThat(model.getFields().get(0).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
         Assert.assertThat(model.getFields().get(0).getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
@@ -178,7 +244,7 @@ public class JSONSchemaMetaDataModelTest {
         List<String> expectedFields = Arrays.asList("aantalDeelnemerschappen", //
                 "alternatieveCorrespondentie", //
                 "betaalwijze");
-        
+
         Assert.assertThat(referencedModel.getFields(), IsCollectionWithSize.hasSize(expectedFields.size()));
         for (String expectedField : expectedFields) {
             Assert.assertThat("Expected field with name " + expectedField + " but got null", referencedModel.getFieldByName(expectedField), CoreMatchers.notNullValue());
@@ -568,7 +634,7 @@ public class JSONSchemaMetaDataModelTest {
         Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(1));
         Assert.assertThat(model.getFieldByName("myfield").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.INTEGER));
     }
-    
+
     @Test
     public void testJsonWithRefToArray() throws Exception {
         URL url = Paths.get("src/test/resources/jsonSchema/jsonSchemaWithRefToArray.json").toUri().toURL();
