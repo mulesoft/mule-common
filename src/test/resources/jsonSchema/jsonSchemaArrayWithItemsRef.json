@@ -1,0 +1,34 @@
+{
+  "type":"array",
+  "items":{
+    "$ref":"#/definitions/Order"
+  },
+  "definitions":{
+    "ProductItem":{
+      "type":"object",
+      "properties":{
+        "product_id":{
+          "type":"string"
+        },
+        "quantity":{
+          "type":"integer"
+        }
+      }
+    },
+    "Order":{
+      "type":"object",
+      "properties":{
+        "order_id":{
+          "type":"string"
+        },
+        "items":{
+          "type":"array",
+          "items":{
+            "$ref":"#/definitions/ProductItem"
+          }
+        }
+      }
+    }
+  },
+  "$schema":"http://json-schema.org/draft-04/schema#"
+}
