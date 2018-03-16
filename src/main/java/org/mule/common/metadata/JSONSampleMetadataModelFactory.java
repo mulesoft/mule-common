@@ -20,6 +20,7 @@ public class JSONSampleMetadataModelFactory  {
     public MetaDataModel buildModel(String json) {
         try {
             ObjectMapper mapper = new ObjectMapper();
+            mapper.disableDefaultTyping();
             JsonNode root = mapper.readValue(json, JsonNode.class);
             return JSONMetaDataHelper.buildModelFromNode(root);
         } catch (IOException e) {
