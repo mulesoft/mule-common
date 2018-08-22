@@ -1,5 +1,8 @@
 package org.mule.common.metadata.test.json.schema;
 
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.is;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -20,6 +23,7 @@ import org.mule.common.metadata.DefaultStructuredMetadataModel;
 import org.mule.common.metadata.DefaultUnknownMetaDataModel;
 import org.mule.common.metadata.JSONSchemaMetadataModelFactory;
 import org.mule.common.metadata.ListMetaDataModel;
+import org.mule.common.metadata.MetaDataField;
 import org.mule.common.metadata.MetaDataModel;
 import org.mule.common.metadata.StructuredMetaDataModel;
 import org.mule.common.metadata.UnknownMetaDataModel;
@@ -27,6 +31,7 @@ import org.mule.common.metadata.datatype.DataType;
 import org.mule.common.metadata.parser.json.JSONObjectType;
 import org.mule.common.metadata.parser.json.SchemaEnv;
 import org.mule.common.metadata.parser.json.SchemaException;
+import org.mule.common.metadata.property.DescriptionMetaDataProperty;
 
 public class JSONSchemaMetaDataModelTest {
 
@@ -164,13 +169,13 @@ public class JSONSchemaMetaDataModelTest {
     @Test
     public void whenSchemaHasRefToDefinitionsByIdItShouldLoadTheTypes() throws Exception {
         URL jsonSchemaResource = getClass().getClassLoader().getResource("jsonSchema/jsonSchemaWithInternalReferencesById.json");
-        
+
         MetaDataModel metaDataModel = modelFactory.buildModel(jsonSchemaResource);
         Assert.assertThat(metaDataModel, CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
         DefaultStructuredMetadataModel model = (DefaultStructuredMetadataModel) metaDataModel;
-        
+
         Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(1));
-        
+
         Assert.assertThat(model.getFields().get(0).getName(), CoreMatchers.is("refById"));
         Assert.assertThat(model.getFields().get(0).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
         Assert.assertThat(model.getFields().get(0).getMetaDataModel(), CoreMatchers.instanceOf(DefaultStructuredMetadataModel.class));
@@ -178,7 +183,7 @@ public class JSONSchemaMetaDataModelTest {
         List<String> expectedFields = Arrays.asList("aantalDeelnemerschappen", //
                 "alternatieveCorrespondentie", //
                 "betaalwijze");
-        
+
         Assert.assertThat(referencedModel.getFields(), IsCollectionWithSize.hasSize(expectedFields.size()));
         for (String expectedField : expectedFields) {
             Assert.assertThat("Expected field with name " + expectedField + " but got null", referencedModel.getFieldByName(expectedField), CoreMatchers.notNullValue());
@@ -305,7 +310,7 @@ public class JSONSchemaMetaDataModelTest {
 
     @Test
     public void testHttpRef() throws Exception {
-        // This test depends on the following remote schema: http://json-schema.org/geo
+        // This test depends on the following remote schema: http://json.schemastore.org/geojson
         InputStream jsonSchemaStream = getClass().getClassLoader().getResourceAsStream("jsonSchema/jsonSchemaWithHttpRef.json");
         String jsonSchemaString = convertStreamToString(jsonSchemaStream);
 
@@ -324,8 +329,20 @@ public class JSONSchemaMetaDataModelTest {
         Assert.assertThat(model.getFields().get(1).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.JSON));
 
         DefaultStructuredMetadataModel warehouselocationModel = (DefaultStructuredMetadataModel) model.getFields().get(1).getMetaDataModel();
-        assertWarehouseLocationModel(warehouselocationModel);
+        assertWarehouseLocationModelForSchemastoreGeojsonSchema(warehouselocationModel);
+    }
 
+    private void assertWarehouseLocationModelForSchemastoreGeojsonSchema(DefaultStructuredMetadataModel warehouselocationModel) {
+        Assert.assertThat(warehouselocationModel.getFields(), IsCollectionWithSize.hasSize(3));
+        Assert.assertThat(warehouselocationModel.getFields().get(0).getMetaDataModel(), CoreMatchers.instanceOf(DefaultListMetaDataModel.class));
+        Assert.assertThat(warehouselocationModel.getFields().get(0).getName(), CoreMatchers.is("bbox"));
+        Assert.assertThat(warehouselocationModel.getFields().get(0).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.LIST));
+        Assert.assertThat(warehouselocationModel.getFields().get(1).getMetaDataModel(), CoreMatchers.instanceOf(DefaultUnknownMetaDataModel.class));
+        Assert.assertThat(warehouselocationModel.getFields().get(1).getName(), CoreMatchers.is("crs"));
+        Assert.assertThat(warehouselocationModel.getFields().get(1).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.UNKNOWN));
+        Assert.assertThat(warehouselocationModel.getFields().get(2).getMetaDataModel(), CoreMatchers.instanceOf(DefaultSimpleMetaDataModel.class));
+        Assert.assertThat(warehouselocationModel.getFields().get(2).getName(), CoreMatchers.is("type"));
+        Assert.assertThat(warehouselocationModel.getFields().get(2).getMetaDataModel().getDataType(), CoreMatchers.is(DataType.STRING));
     }
 
     private void assertWarehouseLocationModel(DefaultStructuredMetadataModel warehouselocationModel) {
@@ -569,7 +586,7 @@ public class JSONSchemaMetaDataModelTest {
         Assert.assertThat(model.getFields(), IsCollectionWithSize.hasSize(1));
         Assert.assertThat(model.getFieldByName("myfield").getMetaDataModel().getDataType(), CoreMatchers.is(DataType.INTEGER));
     }
-    
+
     @Test
     public void testJsonWithRefToArray() throws Exception {
         URL url = Paths.get("src/test/resources/jsonSchema/jsonSchemaWithRefToArray.json").toUri().toURL();
