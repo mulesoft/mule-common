@@ -1,8 +1,5 @@
 package org.mule.common.metadata.test.json.schema;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.is;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -23,7 +20,6 @@ import org.mule.common.metadata.DefaultStructuredMetadataModel;
 import org.mule.common.metadata.DefaultUnknownMetaDataModel;
 import org.mule.common.metadata.JSONSchemaMetadataModelFactory;
 import org.mule.common.metadata.ListMetaDataModel;
-import org.mule.common.metadata.MetaDataField;
 import org.mule.common.metadata.MetaDataModel;
 import org.mule.common.metadata.StructuredMetaDataModel;
 import org.mule.common.metadata.UnknownMetaDataModel;
@@ -31,7 +27,6 @@ import org.mule.common.metadata.datatype.DataType;
 import org.mule.common.metadata.parser.json.JSONObjectType;
 import org.mule.common.metadata.parser.json.SchemaEnv;
 import org.mule.common.metadata.parser.json.SchemaException;
-import org.mule.common.metadata.property.DescriptionMetaDataProperty;
 
 public class JSONSchemaMetaDataModelTest {
 
