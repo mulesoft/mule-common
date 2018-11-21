@@ -1,3 +1,3 @@
-Map pipelineParams = [ : ]
+Map pipelineParams = [mavenAdditionalArgs: "javadoc:jar"]
 
 runtimeProjectsBuild(pipelineParams)
