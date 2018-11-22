@@ -16,6 +16,8 @@
         <maven.clean.plugin.version>2.5</maven.clean.plugin.version>
         <maven.dependency.plugin.version>2.8</maven.dependency.plugin.version>
         <wagon.webdev.version>1.0-beta-2</wagon.webdev.version>
+        <maven.source.plugin.version>2.3</maven.source.plugin.version>
+        <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
         <grammar.java.dir>${basedir}/src/main/java/org/mule/common/query/dsql</grammar.java.dir>
     </properties>
 
@@ -143,6 +145,35 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>javadoc-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
             </plugin>
         </plugins>
         <extensions>
