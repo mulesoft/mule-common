@@ -71,7 +71,7 @@ public class XmlMetaDataFieldFactory implements MetaDataFieldFactory
 
 
     private XmlMetaDataNamespaceManager namespaceManager;
-    private SchemaType rootType;
+    volatile private SchemaType rootType;
 
     public XmlMetaDataFieldFactory(SchemaProvider schemas, QName rootElementName, XmlMetaDataNamespaceManager namespaceManager)
     {
