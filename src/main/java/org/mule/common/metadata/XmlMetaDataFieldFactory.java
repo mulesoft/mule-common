@@ -155,26 +155,38 @@ public class XmlMetaDataFieldFactory implements MetaDataFieldFactory
 
     public SchemaType getRootType()
     {
-        if (rootType != null)
+        if (rootType == null)
         {
-            return rootType;
+            synchronized (this)
+            {
+                if (rootType == null)
+                {
+                    rootType = getRootTypeFromSchemas();
+                }
+            }
         }
+        return rootType;
+    }
 
+    private SchemaType getRootTypeFromSchemas()
+    {
         try
         {
             SchemaGlobalElement rootElement = schemas.findRootElement(rootElementName);
 
             if (rootElement != null)
             {
-                rootType = rootElement.getType();
-                return rootType;
+                return rootElement.getType();
+            }
+            else
+            {
+                return null;
             }
         }
         catch (XmlException e)
         {
             throw new MetaDataGenerationException(e);
         }
-        return null;
     }
 
     private void addSchemaType(SchemaType type, MetaDataModel metaDataModel)
