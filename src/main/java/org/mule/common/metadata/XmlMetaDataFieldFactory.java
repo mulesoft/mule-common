@@ -71,6 +71,7 @@ public class XmlMetaDataFieldFactory implements MetaDataFieldFactory
 
 
     private XmlMetaDataNamespaceManager namespaceManager;
+    volatile private SchemaType rootType;
 
     public XmlMetaDataFieldFactory(SchemaProvider schemas, QName rootElementName, XmlMetaDataNamespaceManager namespaceManager)
     {
@@ -154,6 +155,21 @@ public class XmlMetaDataFieldFactory implements MetaDataFieldFactory
 
     public SchemaType getRootType()
     {
+        if (rootType == null)
+        {
+            synchronized (this)
+            {
+                if (rootType == null)
+                {
+                    rootType = getRootTypeFromSchemas();
+                }
+            }
+        }
+        return rootType;
+    }
+
+    private SchemaType getRootTypeFromSchemas()
+    {
         try
         {
             SchemaGlobalElement rootElement = schemas.findRootElement(rootElementName);
@@ -162,12 +178,15 @@ public class XmlMetaDataFieldFactory implements MetaDataFieldFactory
             {
                 return rootElement.getType();
             }
+            else
+            {
+                return null;
+            }
         }
         catch (XmlException e)
         {
             throw new MetaDataGenerationException(e);
         }
-        return null;
     }
 
     private void addSchemaType(SchemaType type, MetaDataModel metaDataModel)
