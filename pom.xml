@@ -53,7 +53,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <antlr.version>3.5.2</antlr.version>
         <junit.version>4.11</junit.version>
-        <jackson2.version>2.9.9</jackson2.version>
+        <jackson2.version>2.10.0</jackson2.version>
         <lib-dir>lib</lib-dir>
         <maven.clean.plugin.version>2.5</maven.clean.plugin.version>
         <maven.dependency.plugin.version>2.8</maven.dependency.plugin.version>
