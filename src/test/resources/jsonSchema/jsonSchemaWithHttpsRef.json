@@ -8,7 +8,7 @@
     },
     "warehouseLocation": {
       "description": "Coordinates of the warehouse with the product",
-      "$ref": "https://raw.githubusercontent.com/mulesoft/mule-common/3.x/src/test/resources/jsonSchema/emptyItemsSchema.json"
+      "$ref": "https://raw.githubusercontent.com/mulesoft/mule-common/support/3.x/src/test/resources/jsonSchema/emptyItemsSchema.json"
     }
   }
 }
