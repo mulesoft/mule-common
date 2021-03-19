@@ -55,12 +55,18 @@
         <junit.version>4.11</junit.version>
         <jackson2.version>2.11.3</jackson2.version>
         <lib-dir>lib</lib-dir>
-        <maven.clean.plugin.version>2.5</maven.clean.plugin.version>
-        <maven.dependency.plugin.version>2.8</maven.dependency.plugin.version>
+        <maven.clean.plugin.version>3.1.0</maven.clean.plugin.version>
+        <maven.dependency.plugin.version>3.1.2</maven.dependency.plugin.version>
         <wagon.webdev.version>1.0-beta-2</wagon.webdev.version>
-        <maven.source.plugin.version>2.3</maven.source.plugin.version>
-        <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
-        <maven.gpg.plugin.version>1.5</maven.gpg.plugin.version>
+        <maven.source.plugin.version>3.2.1</maven.source.plugin.version>
+        <maven.javadoc.plugin.version>3.2.0</maven.javadoc.plugin.version>
+        <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
+        <maven.resources.plugin.version>3.2.0</maven.resources.plugin.version>
+        <maven.jar.plugin.version>3.2.0</maven.jar.plugin.version>
+        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+        <maven.install.plugin.version>2.5.2</maven.install.plugin.version>
+        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
+
         <!-- Same version as Mule! -->
         <commons.io.version>2.4</commons.io.version>
 
@@ -233,7 +239,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <additionalparam>-Xdoclint:none</additionalparam>
+                    <doclint>none</doclint>
                 </configuration>
             </plugin>
             <plugin>
@@ -251,10 +257,6 @@
                 </executions>
                 <configuration>
                     <skip>${skipGpg}</skip>
-                    <gpgArguments>
-                        <arg>--pinentry-mode</arg>
-                        <arg>loopback</arg>
-                    </gpgArguments>
                 </configuration>
             </plugin>
         </plugins>
@@ -267,29 +269,32 @@
         </extensions>
         <pluginManagement>
             <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
                 <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>${maven.resources.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven.jar.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${maven.install.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
                     <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-dependency-plugin</artifactId>
-                                        <versionRange>[2.8,)</versionRange>
-                                        <goals>
-                                            <goal>copy-dependencies</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
+                        <forkCount>0</forkCount>
                     </configuration>
                 </plugin>
             </plugins>
