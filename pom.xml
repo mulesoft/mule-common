@@ -62,7 +62,7 @@
         <maven.javadoc.plugin.version>2.9.1</maven.javadoc.plugin.version>
         <maven.gpg.plugin.version>1.5</maven.gpg.plugin.version>
         <!-- Same version as Mule! -->
-        <commons.io.version>2.6</commons.io.version>
+        <commons.io.version>2.7</commons.io.version>
         <commons.lang.version>2.6</commons.lang.version>
 
         <grammar.java.dir>${basedir}/src/main/java/org/mule/common/query/dsql</grammar.java.dir>
