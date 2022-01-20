@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.common</groupId>
     <artifactId>mule-common</artifactId>
-    <version>3.8.3-HF-SNAPSHOT</version>
+    <version>3.8.3-20220120</version>
     <name>Mule Shared API</name>
 
     <organization>
